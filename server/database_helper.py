@@ -8,7 +8,7 @@ database_file = 'database.db'
 
 def connect_db():
     rv = sqlite3.connect(database_file)
-    rv.row_factory = sqlite3.Row
+    # rv.row_factory = sqlite3.Row
     return rv
 
 def get_db():
@@ -35,8 +35,11 @@ def sign_up_user(d):
     except:
         return {"success": False, "message": "Form data missing or incorrect type."}
 
-    db = get_db()
-    c = db.cursor()
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
 
     try:
         c.execute("INSERT INTO User VALUES (?, ?, ?, ?, ?, ?, ?)", data)
@@ -48,6 +51,18 @@ def sign_up_user(d):
 
 
 def sign_in_user(d):
-    return helper.generate_random_token()
+    data = (d['email'], d['password'])
 
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute("SELECT COUNT(*) FROM User WHERE Email=? AND Password=?", data)
+    if c.fetchone()[0] == 1:
+        token = helper.generate_random_token()
+        return {"success": True, "message": "Successfully signed in.", "data": token}
+    else:
+        return {"success": False, "message": "Wrong username or password."}
 
