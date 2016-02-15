@@ -1,7 +1,11 @@
 import sqlite3
 
+database_file = 'database.db'
+
 def _read_schema_file():
-    f = open('database.schema', 'r')
+    schema_file = 'database.schema'
+
+    f = open(schema_file, 'r')
     s = f.read()
     f.close()
 
@@ -10,7 +14,7 @@ def _read_schema_file():
 def _create_database_structure():
     script = _read_schema_file()
 
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(database_file)
     
     c = conn.cursor()
     c.executescript(script)
