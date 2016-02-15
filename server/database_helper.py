@@ -187,3 +187,10 @@ def get_user_messages_by_email(d):
 
     return {"success": True, "message": "User messages retrieved.", "data": match}
 
+def get_user_messages_by_token(d):
+    token = d['token']
+
+    email = storage.get_user_email(token)
+
+    return get_user_messages_by_email({'token': token, 'email': email})
+
