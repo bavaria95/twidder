@@ -68,6 +68,15 @@ def sign_in_user(d):
         storage.add_user(token, d['email'])
 
         return {"success": True, "message": "Successfully signed in.", "data": token}
-    else:
-        return {"success": False, "message": "Wrong username or password."}
 
+    return {"success": False, "message": "Wrong username or password."}
+
+
+def sign_out_user(d):
+    token = d['token']
+    
+    if storage.is_token_presented(token):
+        storage.remove_user(token)
+        return {"success": True, "message": "Successfully signed out."}
+
+    return {"success": False, "message": "You are not signed in."}

@@ -27,11 +27,14 @@ class Storage():
 
         return self.d.get(token)
 
+    def is_token_presented(self, token):
+        return token in self.d
+
     def get_all_storage(self):
         print('-'*80)
         print(self.d)
         print('-'*80)
-        
+
         return self.d
 
 
