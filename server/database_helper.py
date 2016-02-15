@@ -1,22 +1,30 @@
 import sqlite3
+from flask import g, Flask
+
+app = Flask(__name__)
 
 database_file = 'database.db'
 
-def _read_schema_file():
-    schema_file = 'database.schema'
+def connect_db():
+    rv = sqlite3.connect(database_file)
+    rv.row_factory = sqlite3.Row
+    return rv
 
-    f = open(schema_file, 'r')
-    s = f.read()
-    f.close()
+def get_db():
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
 
-    return s
+    return g.sqlite_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
 
 def _create_database_structure():
-    script = _read_schema_file()
+    schema_file = 'database.schema'
 
-    conn = sqlite3.connect(database_file)
-    
-    c = conn.cursor()
-    c.executescript(script)
-    conn.commit()
-    conn.close()
+    db = get_db()
+    with app.open_resource(schema_file, mode='r') as f:
+        db.cursor().executescript(f.read())
