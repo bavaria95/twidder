@@ -74,9 +74,38 @@ def sign_in_user(d):
 
 def sign_out_user(d):
     token = d['token']
-    
+
     if storage.is_token_presented(token):
         storage.remove_user(token)
         return {"success": True, "message": "Successfully signed out."}
 
     return {"success": False, "message": "You are not signed in."}
+
+def change_password(d):
+    token = d['token']
+    old_pass = d['old_password']
+    new_pass = d['new_password']
+
+    email = storage.get_user_email(token)
+
+    if not email:
+        return {"success": False, "message": "You are not logged in."}
+
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute("SELECT COUNT(*) FROM User WHERE Email=? AND Password=?",
+                                                         (email, old_pass))
+    # there is such user with such password
+    if c.fetchone()[0] == 1:
+        c.execute("UPDATE User SET Password=? WHERE Email=? AND Password=?",
+                                            (new_pass, email, old_pass))
+        db.commit()
+        return {"success": True, "message": "Password changed."}
+    
+    return {"success": False, "message": "Wrong password."}
+
+
