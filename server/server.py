@@ -37,5 +37,11 @@ def get_user_data_by_email():
     params = request.args
     return json.dumps(database_helper.get_user_data_by_email(params))
 
+@app.route("/get_user_data_by_token", methods=["GET"])
+def get_user_data_by_token():
+    params = request.args
+    return json.dumps(database_helper.get_user_data_by_token(params))
+
+
 if __name__ == "__main__":
     app.run(debug=True)

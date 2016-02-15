@@ -132,4 +132,9 @@ def get_user_data_by_email(d):
 
     return {"success": True, "message": "User data retrieved.", "data": data}
 
+def get_user_data_by_token(d):
+    token = d['token']
 
+    email = storage.get_user_email(token)
+
+    return get_user_data_by_email({'token': token, 'email': email})
