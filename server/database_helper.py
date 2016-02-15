@@ -154,6 +154,11 @@ def post_message(d):
     except:
         return {"success": False, "message": "Database problems."}
 
+    c.execute("SELECT COUNT(*) FROM User WHERE Email=?", (to_email, ))
+    if c.fetchone()[0] != 1:
+        return {"success": False, "message": "No such user."}
+
+
     c.execute('INSERT INTO Message(To_email, From_email, Content) VALUES (?, ?, ?)',
                                                     (to_email, from_email, message))
     db.commit()
