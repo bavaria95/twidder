@@ -42,6 +42,11 @@ def get_user_data_by_token():
     params = request.args
     return json.dumps(database_helper.get_user_data_by_token(params))
 
+@app.route("/post_message", methods=["POST"])
+def post_message():
+    params = request.form
+    return json.dumps(database_helper.post_message(params))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

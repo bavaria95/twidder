@@ -138,3 +138,24 @@ def get_user_data_by_token(d):
     email = storage.get_user_email(token)
 
     return get_user_data_by_email({'token': token, 'email': email})
+
+def post_message(d):
+    token = d['token']
+    message = d['message']
+    to_email = d['email']
+
+    from_email = storage.get_user_email(token)
+    if not from_email:
+        return {"success": False, "message": "You are not signed in."}
+
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute('INSERT INTO Message(To_email, From_email, Content) VALUES (?, ?, ?)',
+                                                    (to_email, from_email, message))
+    db.commit()
+
+    return {"success": True, "message": "Message posted"}
