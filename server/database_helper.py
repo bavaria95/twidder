@@ -16,7 +16,6 @@ def get_db():
 
     return g.sqlite_db
 
-
 @app.teardown_appcontext
 def close_db():
     if hasattr(g, 'sqlite_db'):
