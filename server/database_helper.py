@@ -62,6 +62,7 @@ def sign_in_user(d):
     c.execute("SELECT COUNT(*) FROM User WHERE Email=? AND Password=?", data)
     if c.fetchone()[0] == 1:
         token = helper.generate_random_token()
+
         return {"success": True, "message": "Successfully signed in.", "data": token}
     else:
         return {"success": False, "message": "Wrong username or password."}
