@@ -1,0 +1,286 @@
+#logo {
+    float: left;
+}
+
+body {
+    background: #6699ff;
+}
+
+label {
+	font-size: 13;
+}
+
+#container {
+	margin-top: 100px;
+	margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    height: 400px;
+}
+
+
+#forms {
+    width: 250px;
+    height: 400px;
+    float: right;
+}
+
+#login {
+    width: 250px;
+    height: 100px;
+    background: #FFF;  
+    margin-bottom: 10px;  
+}
+
+#login-form {
+	padding-top: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#signup {
+    width: 250px;
+    height: 290px;
+    background: #FFF;
+}
+
+#signup-form {
+	padding-top: 1px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.line {
+	clear: both;
+}
+
+.form-field {
+	width: 140px;
+	float: right;
+}
+
+.form-button {
+	margin-top: 5px;
+	float: right;
+}
+
+#error-reg {
+    color: #FF0000;
+    width: 250px;
+    height: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    font-size: 85%; 
+}
+
+#error-log {
+    color: #FF0000;
+    width: 250px;
+    height: 5px;
+    position: relative;
+    top: 5px;
+    font-size: 85%; 
+}
+
+
+
+.line {
+    clear: both;
+}
+
+.form-field {
+    width: 140px;
+    float: right;
+}
+
+.form-button {
+    margin-top: 5px;
+    float: right;
+}
+
+
+#tabs {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+#tabs-line {
+    border: 1px solid black;
+    width: 900px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 140%;
+}
+
+#account-tab {
+    float: left;
+    height: 30px;
+    width: 33%;
+    text-align: center;
+    background-color: #F000FF;
+}
+
+#home-tab {
+    float: left;
+    height: 30px;
+    width: 33%;
+    text-align: center;
+    background-color: #00FF00;
+}
+
+.info-label {
+    font-style: italic;
+}
+
+
+#browse-tab {
+    height: 30px;
+    text-align: center;
+    background-color: #00FFFF;
+}
+
+#content {
+    border: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+    height: 550px;
+}
+#content-long {
+    border: 1px solid black;
+    border-bottom: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+    height: 1000px;
+}
+
+
+.info-label {
+    float: left;
+    width: 100px;
+}
+
+.user-info {
+    float: left;
+    width: 300px;
+    height: 200px;
+    margin-left: 100px;
+    margin-top: 30px;
+}
+
+.status-update {
+    margin-top: 50px;
+}
+
+#status-field-home {
+    width: 400px;
+    height: 100px;
+}
+
+#status-send-home {
+    margin-top: 10px;
+}
+
+#wall-refresh-home {
+    float: right;
+    margin-right: 100px;
+    width: 100px;
+    height: 40px;
+}
+
+#wall-home {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+#status-field-browse {
+    width: 400px;
+    height: 100px;
+}
+
+#status-send-browse {
+    margin-top: 10px;
+}
+
+#wall-refresh-browse {
+    float: right;
+    margin-right: 100px;
+    width: 100px;
+    height: 40px;
+}
+
+#wall-browse {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+#pwd-change-wrapper {
+    float: left;
+}
+
+#password-change {
+    padding: 60px;
+    width: 300px;
+    height: 200px;
+}
+
+#change-error {
+    float: left;
+    color: #FF0000;
+    font-size: 130%;
+    padding-top: 30px;
+    padding-left: 60px;
+    width: 300px;
+    height: 50px;
+}
+
+#sign-out {
+    float: right;
+    margin: 140px;
+    width: 200px;
+    height: 80px;
+}
+
+#search {
+    width: 400px;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#search-label {
+    font-size: 200%;
+    color: blue;
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+#search-field {
+    width: 300px;
+    height: 30px;
+}
+
+#search-send {
+    width: 80px;
+    height: 30px;
+}
+
+#search-error {
+    color: #FF0000;
+    font-size: 130%;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 50px;
+}
