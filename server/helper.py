@@ -10,15 +10,9 @@ class Storage():
             raise 'Token is used.'
 
         self.d[token] = email
-        print('-'*80)
-        print(self.d)
-        print('-'*80)
 
     def remove_user(self, token):
         self.d.pop(token, None)
-        print('-'*80)
-        print(self.d)
-        print('-'*80)
 
     def get_user_email(self, token):
         return self.d.get(token)
