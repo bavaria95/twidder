@@ -164,3 +164,22 @@ def post_message(d):
     db.commit()
 
     return {"success": True, "message": "Message posted"}
+
+def get_user_messages_by_email(d):
+    token = d['token']
+    email = d['email']
+
+    if not storage.get_user_email(token):
+        return {"success": False, "message": "You are not signed in."}
+
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute("SELECT * FROM Message WHERE To_email=?", (email, ))
+    match = map(lambda x: {'writer': x[2], 'content': x[3]}, c.fetchall())
+
+    return {"success": True, "message": "User messages retrieved.", "data": match}
+

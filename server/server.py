@@ -47,6 +47,12 @@ def post_message():
     params = request.form
     return json.dumps(database_helper.post_message(params))
 
+@app.route("/get_user_messages_by_email", methods=["POST"])
+def get_user_messages_by_email():
+    params = request.form
+    return json.dumps(database_helper.get_user_messages_by_email(params))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
