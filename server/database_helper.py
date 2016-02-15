@@ -178,6 +178,10 @@ def get_user_messages_by_email(d):
     except:
         return {"success": False, "message": "Database problems."}
 
+    c.execute("SELECT COUNT(*) FROM User WHERE Email=?", (email, ))
+    if c.fetchone()[0] != 1:
+        return {"success": False, "message": "No such user."}
+
     c.execute("SELECT * FROM Message WHERE To_email=?", (email, ))
     match = map(lambda x: {'writer': x[2], 'content': x[3]}, c.fetchall())
 
