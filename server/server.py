@@ -32,7 +32,10 @@ def change_password():
     params = request.form
     return json.dumps(database_helper.change_password(params))
 
-
+@app.route("/get_user_data_by_email", methods=["GET"])
+def get_user_data_by_email():
+    params = request.args
+    return json.dumps(database_helper.get_user_data_by_email(params))
 
 if __name__ == "__main__":
     app.run(debug=True)

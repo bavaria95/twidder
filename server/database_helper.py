@@ -108,4 +108,28 @@ def change_password(d):
     
     return {"success": False, "message": "Wrong password."}
 
+def get_user_data_by_email(d):
+    token = d['token']
+    email = d['email']
+
+    if not storage.is_token_presented(token):
+        return {"success": False, "message": "You are not signed in."}
+
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute("SELECT * FROM User WHERE Email=?", (email,))
+
+    match = c.fetchone()
+    if not match:
+        return {"success": False, "message": "No such user."}
+
+    data = {'email': match[0], 'firstname': match[2], 'familyname': match[3], 
+            'gender': match[4], 'city': match[5], 'country': match[6]}
+
+    return {"success": True, "message": "User data retrieved.", "data": data}
+
 
