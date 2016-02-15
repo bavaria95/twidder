@@ -1,7 +1,6 @@
 import sqlite3
 from flask import g, Flask
-import os
-import binascii
+import helper
 
 app = Flask(__name__)
 
@@ -47,11 +46,8 @@ def sign_up_user(d):
 
     return {"success": True, "message": "Successfully created a new user."}
 
-def generate_token():
-    token_length = 36
-    return binascii.hexlify(os.urandom(token_length))
 
 def sign_in_user(d):
-    return ''
+    return helper.generate_random_token()
 
 
