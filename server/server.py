@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request
+import json
 import database_helper
 
 app = Flask(__name__)
@@ -11,9 +12,12 @@ def before_request():
 def teardown_request(exception):
     database_helper.close_db()
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+@app.route("/sign_up", methods=["POST"])
+def sign_up():
+    params = request.form
+    return json.dumps(database_helper.sign_up_user(params))
+
+
 
 
 if __name__ == "__main__":

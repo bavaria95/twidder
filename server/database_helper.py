@@ -27,3 +27,22 @@ def _create_database_structure():
     db = get_db()
     with app.open_resource(schema_file, mode='r') as f:
         db.cursor().executescript(f.read())
+
+def sign_up_user(d):
+    try:
+        data = (d['email'], d['password'], d['firstname'], d['familyname'], d['gender'], d['city'], d['country'])
+    except:
+        return {"success": False, "message": "Form data missing or incorrect type."}
+
+    db = get_db()
+    c = db.cursor()
+
+    try:
+        c.execute("INSERT INTO User VALUES (?, ?, ?, ?, ?, ?, ?)", data)
+        db.commit()
+    except:
+        return {"success": False, "message": "User already exists."}
+
+    return {"success": True, "message": "Successfully created a new user."}
+
+
