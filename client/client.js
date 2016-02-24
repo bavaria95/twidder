@@ -72,9 +72,7 @@ define_onclick_functions = function() {
 
     var signout_button = document.getElementById("sign-out");
     signout_button.onclick = function() {
-        serverstub.signOut(get_token());
-        localStorage.removeItem('token');
-        display_view('welcomeview');
+        signout();
     }
 
     var search_button = document.getElementById("search-send");
@@ -179,6 +177,13 @@ signup = function() {
     }
 }
 
+signout = function() {
+    var data = {'token': get_token()};
+    ajax_call("POST", "/sign_out", function(){}, data);
+
+    localStorage.removeItem('token');
+    display_view('welcomeview');
+}
 
 send_button = function(where) {
         var msg = document.getElementById("status-field-" + where).value;

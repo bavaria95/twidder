@@ -26,7 +26,7 @@ def sign_in():
 
 @app.route("/sign_out", methods=["POST"])
 def sign_out():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.sign_out_user(params))
 
 @app.route("/change_password", methods=["POST"])
