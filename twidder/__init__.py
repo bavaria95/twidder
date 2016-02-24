@@ -65,6 +65,5 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
-
 # if __name__ == "__main__":
 #     app.run(debug=True)

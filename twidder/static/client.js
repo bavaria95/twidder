@@ -26,6 +26,15 @@ ajax_call = function(method, path, func, data) {
 
 
 window.onload = function(){
+    var exampleSocket = new WebSocket("ws://" + document.domain + ":5000/sock");
+    exampleSocket.onopen = function (event) {
+      exampleSocket.send("Here's some text that the server is urgently awaiting!"); 
+    };
+
+    exampleSocket.onmessage = function (event) {
+      console.log(event.data);
+    }
+
     if (localStorage.getItem('token'))
         display_view('profileview');
     else 
