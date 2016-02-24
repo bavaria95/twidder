@@ -1,8 +1,10 @@
 from flask import Flask, request
 import json
 import database_helper
+from flask.ext.cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.before_request
 def before_request():
