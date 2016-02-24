@@ -194,11 +194,16 @@ send_button = function(where) {
         else if (where == 'browse')
             var email = document.getElementById("search-field").value;
 
-        var resp = serverstub.postMessage(token, msg, email);
-        if (resp.success) {
-            document.getElementById("status-field-" + where).value = '';
-            refresh_wall(where, email);
+        var data = {'token': token, 'message': msg, 'email': email};
+
+        func = function(resp) {
+            if (resp.success) {
+                document.getElementById("status-field-" + where).value = '';
+                refresh_wall(where, email);
+            }
         }
+
+        ajax_call("POST", "/post_message", func, data);
     }
 
 
