@@ -346,16 +346,22 @@ change_password = function() {
         return false;
     }
 
-    var resp = serverstub.changePassword(get_token(), current, pass1);
-    if (!resp.success) {
-        document.getElementById('change-error').style.color = "FF0000";
-        display_error_msg_change(resp.message);
+    var data = {'token': get_token(), 'old_password': current, 
+                'new_password': pass1};
+
+    func = function(resp) {
+        if (!resp.success) {
+            document.getElementById('change-error').style.color = "FF0000";
+            display_error_msg_change(resp.message);
+        }
+        else {
+            document.getElementById('change-error').style.color = "00FF00";
+            display_error_msg_change(resp.message);
+            document.getElementById("pass-change-form").reset();
+        }
     }
-    else {
-        document.getElementById('change-error').style.color = "00FF00";
-        display_error_msg_change(resp.message);
-        document.getElementById("pass-change-form").reset();
-    }
+
+    ajax_call("POST", "/change_password", func, data);
 
 }
 
