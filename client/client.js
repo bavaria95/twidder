@@ -264,7 +264,31 @@ get_token = function() {
 
 get_user_info = function() {
     token = get_token();
-    return serverstub.getUserDataByToken(token).data;
+
+    /* func = function(resp) {
+        return resp.data;
+    }
+
+    ajax_call("GET", "/get_user_data_by_token?token="+token, func);
+    // return serverstub.getUserDataByToken(token).data;*/
+
+    url = 'http://127.0.0.1:5000';
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open("GET", url + "/get_user_data_by_token?token="+token, false);
+
+    xhttp.send();
+
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+            var resp = JSON.parse(xhttp.responseText);
+
+            return resp.data;
+
+            console.log(JSON.parse(xhttp.responseText));
+    }
+
 }
 
 highlight_label = function(label) {
