@@ -1,6 +1,7 @@
 import os
 import binascii
 
+# to store tokens and corresponded emails to it
 class Storage():
     def __init__(self):
         self.d = {}
@@ -22,6 +23,10 @@ class Storage():
 
     def get_all_storage(self):
         return self.d
+
+    def remove_token_by_email(self, email):
+        for k,v in self.d.iteritems():
+            self.d.pop(k, None) if email == v
 
 
 def generate_random_token():
