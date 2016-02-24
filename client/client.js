@@ -12,7 +12,7 @@ ajax_get = function(path, func) {
         }
     };
 
-    xhttp.open("GET", url + "/users/"+get_id()+"/meals/"+id+"?token="+get_token(), true);
+    xhttp.open("GET", url + path, true);
     xhttp.send();
 }
 
