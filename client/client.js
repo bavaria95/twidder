@@ -77,12 +77,7 @@ define_onclick_functions = function() {
 
     var search_button = document.getElementById("search-send");
     search_button.onclick = function() {
-        var email = document.getElementById("search-field").value;
-        var resp = serverstub.getUserDataByEmail(get_token(), email);
-        if (!resp.success) 
-            display_error_search(resp.message)
-        else 
-            show_profile(resp.data);
+        search_method();
     }
 }
 
@@ -185,6 +180,20 @@ signout = function() {
     display_view('welcomeview');
 }
 
+search_method = function() {
+    var email = document.getElementById("search-field").value;
+    
+    func = function(resp) {
+        if (!resp.success) 
+            display_error_search(resp.message)
+        else 
+            show_profile(resp.data);
+    }
+
+    ajax_call("GET", "/get_user_data_by_email?token="+get_token()+"&email="+email,
+                func);
+}
+
 send_button = function(where) {
         var msg = document.getElementById("status-field-" + where).value;
         var token = get_token();
@@ -226,7 +235,8 @@ refresh_wall = function(which, email) {
     if (which == 'home')
         ajax_call("POST", "/get_user_messages_by_token", func, {'token': get_token()});
     else if (which == 'browse')
-        var resp = serverstub.getUserMessagesByEmail(get_token(), email);
+        ajax_call("POST", "/get_user_messages_by_email", func, 
+                  {'email': email, 'token': get_token()});
 }
 
 append_message_li = function(which_wall, msg) {
