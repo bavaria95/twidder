@@ -21,7 +21,7 @@ def sign_up():
 
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.sign_in_user(params))
 
 @app.route("/sign_out", methods=["POST"])

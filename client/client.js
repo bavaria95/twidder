@@ -130,16 +130,20 @@ display_error_msg_log = function(msg) {
 }
 
 login = function(email, password) {
-    var resp = serverstub.signIn(email, password);
+    var data = {'email': email, 'password': password};
 
-    if (!resp.success) 
-        display_error_msg_log(resp.message);
-    else {
-        localStorage.setItem('token', resp.data);
+    func = function(resp) {
+        if (!resp.success) 
+            display_error_msg_log(resp.message);
+        else {
+            localStorage.setItem('token', resp.data);
 
-        display_view('profileview');
-        activate_account();
+            display_view('profileview');
+            activate_account();
+        }
     }
+
+    ajax_call("POST", "/sign_in", func, data);
 }
 
 login_form = function() {
