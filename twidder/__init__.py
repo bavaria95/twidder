@@ -66,10 +66,5 @@ def get_user_messages_by_token():
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
 
-@app.route("/init", methods=["GET"])
-def main():
-    database_helper._create_database_structure()
-
-    return ''
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)
