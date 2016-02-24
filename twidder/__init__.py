@@ -3,7 +3,8 @@ import json
 import database_helper
 from flask.ext.cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
+
 CORS(app)
 
 @app.before_request
@@ -13,6 +14,11 @@ def before_request():
 @app.teardown_request
 def teardown_request(exception):
     database_helper.close_db()
+
+
+@app.route("/", methods=["GET"])
+def serve():
+    return app.send_static_file('client.html')
 
 @app.route("/sign_up", methods=["POST"])
 def sign_up():
@@ -59,5 +65,11 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
+
+@app.route("/init", methods=["GET"])
+def main():
+    database_helper._create_database_structure()
+
+    return ''
 if __name__ == "__main__":
     app.run(debug=True)
