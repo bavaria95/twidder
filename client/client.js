@@ -24,6 +24,7 @@ ajax_call = function(method, path, func, data) {
         xhttp.send();
 }
 
+
 window.onload = function(){
     if (localStorage.getItem('token'))
         display_view('profileview');
@@ -163,12 +164,14 @@ signup = function() {
 
 
     if (check_reg_correctness()) {
-    	var resp = serverstub.signUp(data)
+        func = function(resp) {
+        	if (!resp.success) 
+        		display_error_msg_reg(resp.message);
+        	else
+        		login(data.email, data.password);
+        }
 
-    	if (!resp.success) 
-    		display_error_msg_reg(resp.message);
-    	else
-    		login(data.email, data.password);
+        ajax_call("POST", "/sign_up", func, data);
     }
 }
 

@@ -16,7 +16,7 @@ def teardown_request(exception):
 
 @app.route("/sign_up", methods=["POST"])
 def sign_up():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.sign_up_user(params))
 
 @app.route("/sign_in", methods=["POST"])
