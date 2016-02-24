@@ -28,6 +28,22 @@ class Storage():
         for k,v in self.d.iteritems():
             self.d.pop(k, None) if email == v
 
+class SocketPool():
+    def __init__(self):
+        self.d = {}
+
+    def add_socket(self, sock, email):
+        self.d[email] = sock
+
+    def get_socket(self, email):
+        return self.d.get(email, None)
+
+    def is_socket_presented(self, email):
+        return email in self.d
+
+    def remove_socket(self, email):
+        return self.d.pop(email, None)
+
 
 def generate_random_token():
     token_length = 36
