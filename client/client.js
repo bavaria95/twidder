@@ -208,22 +208,25 @@ send_button = function(where) {
 
 
 refresh_wall = function(which, email) {
-    if (which == 'home')
-        var resp = serverstub.getUserMessagesByToken(get_token());
-    else if (which == 'browse')
-        var resp = serverstub.getUserMessagesByEmail(get_token(), email);
 
-    document.getElementById("wall-list" + '-' + which).innerHTML = ''
+    func = function(resp) {
+        if (resp.success) {
+            document.getElementById("wall-list" + '-' + which).innerHTML = ''
 
-    if (resp.success) {
-        var data = resp.data;
+            var messages = resp.data;
 
-        for (var msg of data)
-            append_message_li(which, msg);
+            for (var msg of messages)
+                append_message_li(which, msg);
+            
+            if (messages.length > 8)
+                prolonging_content(which);
+        }
     }
     
-    if (data.length > 8)
-        prolonging_content(which);
+    if (which == 'home')
+        ajax_call("POST", "/get_user_messages_by_token", func, {'token': get_token()});
+    else if (which == 'browse')
+        var resp = serverstub.getUserMessagesByEmail(get_token(), email);
 }
 
 append_message_li = function(which_wall, msg) {

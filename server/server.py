@@ -46,17 +46,17 @@ def get_user_data_by_token():
 
 @app.route("/post_message", methods=["POST"])
 def post_message():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.post_message(params))
 
 @app.route("/get_user_messages_by_email", methods=["POST"])
 def get_user_messages_by_email():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.get_user_messages_by_email(params))
 
 @app.route("/get_user_messages_by_token", methods=["POST"])
 def get_user_messages_by_token():
-    params = request.form
+    params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
 if __name__ == "__main__":
