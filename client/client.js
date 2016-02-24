@@ -1,7 +1,42 @@
-displayView = function(){  
-   // the code required to display a view  
-}; 
- 
+ajax_get = function(path, func) {
+    url = 'http://127.0.0.1:5000';
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+            var resp = JSON.parse(xhttp.responseText);
+
+            func(resp);
+        }
+    };
+
+    xhttp.open("GET", url + "/users/"+get_id()+"/meals/"+id+"?token="+get_token(), true);
+    xhttp.send();
+}
+
+ajax_post = function(path, func, data) {
+    url = 'http://127.0.0.1:5000';
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+            var resp = JSON.parse(xhttp.responseText);
+
+            func(resp);
+
+            console.log(JSON.parse(xhttp.responseText));
+        }
+    };
+
+    xhttp.open("POST", url + path, true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify(data));
+}
+
 window.onload = function(){
     if (localStorage.getItem('token'))
         display_view('profileview');
