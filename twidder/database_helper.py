@@ -8,6 +8,7 @@ database_file = 'database.db'
 
 # instancing from Storage class, which takes care about logged users
 storage = helper.Storage()
+socket_pool = helper.SocketPool()
 
 def connect_db():
     rv = sqlite3.connect(database_file)
@@ -66,6 +67,7 @@ def sign_in_user(d):
     if c.fetchone()[0] == 1:
         token = helper.generate_random_token()
         storage.add_user(token, d['email'])
+        
 
         return {"success": True, "message": "Successfully signed in.", "data": token}
 

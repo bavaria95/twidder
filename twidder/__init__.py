@@ -2,7 +2,11 @@ from flask import Flask, request
 import json
 import database_helper
 from flask.ext.cors import CORS
+
+from collections import deque
+
 from flask_sockets import Sockets
+
 
 app = Flask(__name__, static_url_path='')
 sockets = Sockets(app)
@@ -67,16 +71,26 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
+
 @sockets.route('/sock')
-def echo_socket(ws):
-    print('got socket')
-    while not ws.closed:
-        print('waiting')
-        message = ws.receive()
-        print(message)
-        ws.send(message)
-        print('sended some info')
-    
+def sock(ws):
+
+    while True:
+        msg = ws.receive()
+        if msg is not None:
+            email = msg
+
+            if database_helper.socket_pool.is_socket_presented(email):
+                old_sock = database_helper.socket_pool.get_socket(email)
+                old_sock.send('bye')
+                database_helper.socket_pool.remove_socket(email)
+
+            database_helper.socket_pool.add_socket(email, ws)
+        else:
+            break
+
+    # if email:
+    #     database_helper.socket_pool.remove_socket(email)
 
 if __name__ == "__main__":
     from gevent import pywsgi

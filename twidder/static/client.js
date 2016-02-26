@@ -1,3 +1,9 @@
+var login_socket;
+window.onbeforeunload = function(){
+    if (login_socket)
+        login_socket.close();
+}
+
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
 
@@ -24,17 +30,7 @@ ajax_call = function(method, path, func, data) {
         xhttp.send();
 }
 
-
 window.onload = function(){
-    var exampleSocket = new WebSocket("ws://" + document.domain + ":5000/sock");
-    exampleSocket.onopen = function (event) {
-      exampleSocket.send("Here's some text that the server is urgently awaiting!"); 
-    };
-
-    exampleSocket.onmessage = function (event) {
-      console.log(event.data);
-    }
-
     if (localStorage.getItem('token'))
         display_view('profileview');
     else 
@@ -142,6 +138,24 @@ login = function(email, password) {
 
             display_view('profileview');
             activate_account();
+
+            login_socket = new WebSocket("ws://" + document.domain + ":5000/sock");
+            login_socket.onopen = function (event) {
+                // console.log('sending hello msg');
+                login_socket.send(email); 
+            };
+            login_socket.onmessage = function (event) {
+                // console.log('got goodbye msg: ' + event.data);
+                login_socket.close();
+                signout();
+            };
+            login_socket.onclose = function (event) {
+                console.log('closed socket', event);
+            };
+            login_socket.onerror = function (event) {
+                console.log('error', event);
+            };
+
         }
     }
 
