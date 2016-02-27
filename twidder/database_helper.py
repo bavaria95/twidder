@@ -204,9 +204,15 @@ def get_user_messages_by_token(d):
 def update(token):
     registered = _get_number_of_registered_users()
     online = socket_pool.size()
+    posts = get_user_messages_by_token({'token': token})
+    if posts['success']:
+        num_posts = len(posts['data'])
+    else:
+        num_posts = None
 
     print(registered)
     print(online)
+    print(num_posts)
 
 def _get_number_of_registered_users():
     db = get_db()
