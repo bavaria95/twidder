@@ -166,6 +166,10 @@ display_view = function(view) {
     }
 }
 
+display_error_msg = function(id, msg) {
+    document.getElementById(id).innerHTML = msg;
+}
+
 check_reg_correctness = function() {
 	var pass1 = document.getElementById("regpass1").value;
     var pass2 = document.getElementById("regpass2").value;
@@ -182,17 +186,9 @@ check_reg_correctness = function() {
     	status = false;
     }
 
-    display_error_msg_reg(msg);
+    display_error_msg("error-reg", msg);
 
     return status;
-}
-
-display_error_msg_reg = function(msg) {
-	document.getElementById("error-reg").innerHTML = msg;
-}
-
-display_error_msg_log = function(msg) {
-	document.getElementById("error-log").innerHTML = msg;
 }
 
 login = function(email, password) {
@@ -200,7 +196,7 @@ login = function(email, password) {
 
     func = function(resp) {
         if (!resp.success) 
-            display_error_msg_log(resp.message);
+            display_error_msg("error-log", resp.message);
         else {
             localStorage.setItem('token', resp.data);
 
@@ -255,8 +251,8 @@ signup = function() {
 
     if (check_reg_correctness()) {
         func = function(resp) {
-        	if (!resp.success) 
-        		display_error_msg_reg(resp.message);
+        	if (!resp.success)
+                display_error_msg("error-reg", resp.message);
         	else
         		login(data.email, data.password);
         }
@@ -279,7 +275,7 @@ search_method = function() {
     
     func = function(resp) {
         if (!resp.success) 
-            display_error_search(resp.message)
+            display_error_msg("search-error", resp.message);
         else 
             show_profile(resp.data);
     }
@@ -420,7 +416,7 @@ change_password = function() {
         error_msg = "Password has to be longer than 8 symbols";
 
     if (error_msg != '') {
-        display_error_msg_change(error_msg);
+        display_error_msg("change-error", error_msg);
         return false;
     }
 
@@ -430,25 +426,17 @@ change_password = function() {
     func = function(resp) {
         if (!resp.success) {
             document.getElementById('change-error').style.color = "FF0000";
-            display_error_msg_change(resp.message);
+            display_error_msg("change-error", resp.message);
         }
         else {
             document.getElementById('change-error').style.color = "00FF00";
-            display_error_msg_change(resp.message);
+            display_error_msg("change-error", resp.message);
             document.getElementById("pass-change-form").reset();
         }
     }
 
     ajax_call("POST", "/change_password", func, data);
 
-}
-
-display_error_msg_change = function(msg) {
-    document.getElementById("change-error").innerHTML = msg;
-}
-
-display_error_search = function(msg) {
-    document.getElementById("search-error").innerHTML = msg;
 }
 
 show_profile = function(data) {
