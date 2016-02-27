@@ -107,6 +107,8 @@ page('/stats', function() {
     stats_socket.onerror = function (event) {
         console.log('error data socket', event);
     };
+
+    draw_charts();
 });
 
 
@@ -128,19 +130,13 @@ draw_charts = function(data1, data2) {
         color: "#46BFBD",
         highlight: "#5AD3D1",
         label: "Green"
-    },
-    {
-        value: 100,
-        color: "#FDB45C",
-        highlight: "#FFC870",
-        label: "Yellow"
     }
-]
+    ]
 
-var options = {};
-    
+    var options = {segmentShowStroke : true, animateRotate : true, animateScale : false};
+
     var ctx = document.getElementById("myChart").getContext("2d");
-    var myDoughnutChart = new Chart(ctx[1]).Doughnut(data, options);
+    var myDoughnutChart = new Chart(ctx).Doughnut(data, options);
 }
 
 
