@@ -1,3 +1,26 @@
+page('/', function(){
+  console.log('welcome');
+});
+
+page('/account', function(){
+  console.log('account');
+});
+
+page('/home', function(){
+  console.log('home');
+});
+
+page('/browse', function(){
+  console.log('browse');
+});
+
+page('*', function(){
+  console.error('Page not found :(');
+});
+
+page.start();
+
+
 
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
