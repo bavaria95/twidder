@@ -71,6 +71,10 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
+@app.errorhandler(404)
+def another(e):
+    return app.send_static_file('client.html')
+
 
 @sockets.route('/sock')
 def sock(ws):
