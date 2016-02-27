@@ -99,7 +99,9 @@ page('/stats', function() {
         stats_socket.send(get_token()); 
     };
     stats_socket.onmessage = function (event) {
-        console.log('redrawing', event.data)
+        var data = JSON.parse(event.data);
+        draw_charts(data);
+        console.log('redrawing', JSON.parse(event.data))
     };
     stats_socket.onclose = function (event) {
         console.log('closed data socket', event);
@@ -107,8 +109,6 @@ page('/stats', function() {
     stats_socket.onerror = function (event) {
         console.log('error data socket', event);
     };
-
-    draw_charts();
 });
 
 
@@ -117,26 +117,21 @@ page('*', function(){
 });
 
 
-draw_charts = function(data1, data2) {
-    var data = [
-    {
-        value: 300,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "Red"
-    },
-    {
-        value: 50,
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: "Green"
-    }
-    ]
-
-    var options = {segmentShowStroke : true, animateRotate : true, animateScale : false};
-
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myDoughnutChart = new Chart(ctx).Doughnut(data, options);
+draw_charts = function(d) {
+    var data = {
+        labels: ["Online", "Registered"],
+        datasets: [{
+                    label: "My First dataset",
+                    fillColor: "#F7464A",
+                    strokeColor: "rgba(220,220,220,0.8)",
+                    highlightFill: "#FF5A5E",
+                    highlightStroke: "rgba(220,220,220,1)",
+                    data: [d['online'], d['all_users']]
+                    }
+                ]
+    };
+    var ctx = document.getElementById("users-chart").getContext("2d");
+    var myDoughnutChart = new Chart(ctx).Bar(data);
 }
 
 
