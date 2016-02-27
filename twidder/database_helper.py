@@ -37,6 +37,7 @@ def _create_database_structure():
         db.cursor().executescript(f.read())
 
 def sign_up_user(d):
+    helper.log('reg')
     try:
         data = (d['email'], d['password'], d['firstname'], d['familyname'], d['gender'], d['city'], d['country'])
     except:
@@ -54,6 +55,8 @@ def sign_up_user(d):
     except:
         return {"success": False, "message": "User already exists."}
 
+    helper.log('reg')
+    notify_all_users()
     return {"success": True, "message": "Successfully created a new user."}
 
 
@@ -71,7 +74,6 @@ def sign_in_user(d):
         token = helper.generate_random_token()
         storage.add_user(token, d['email'])
         
-
         return {"success": True, "message": "Successfully signed in.", "data": token}
 
     return {"success": False, "message": "Wrong username or password."}
@@ -84,7 +86,12 @@ def sign_out_user(d):
         email = storage.get_user_email(token)
         storage.remove_user(token)
         socket_pool.remove_socket(email)
+        
+        notify_all_users()
+        helper.log('logout')
+
         return {"success": True, "message": "Successfully signed out."}
+
 
     return {"success": False, "message": "You are not signed in."}
 
@@ -170,6 +177,11 @@ def post_message(d):
                                                     (to_email, from_email, message))
     db.commit()
 
+
+    token_of_receiver = storage.get_token_by_email(to_email)
+    if token_of_receiver:
+        notify_user(token_of_receiver[0])
+
     return {"success": True, "message": "Message posted"}
 
 def get_user_messages_by_email(d):
@@ -201,7 +213,20 @@ def get_user_messages_by_token(d):
 
     return get_user_messages_by_email({'token': token, 'email': email})
 
-def update(token):
+def notify_user(token):
+    helper.log('notify_user')
+    data = collect_information(token)
+    helper.log(data)
+    stats_info.notify_by_token(token, data)
+
+def notify_all_users():
+    tokens = stats_info.all_subscribers()
+    for t in tokens:
+        data = collect_information(t)
+        helper.log(data)
+        stats_info.notify_by_token(t, data)
+
+def collect_information(token):
     registered = _get_number_of_registered_users()
     online = socket_pool.size()
     posts = get_user_messages_by_token({'token': token})
@@ -210,9 +235,14 @@ def update(token):
     else:
         num_posts = None
 
-    print(registered)
-    print(online)
-    print(num_posts)
+    helper.log('collecting')
+    helper.log(registered)
+    helper.log(online)
+    helper.log(num_posts)
+    helper.log('collecting end')
+    helper.log('')
+
+    return {'all_users': registered, 'online': online, 'posts': num_posts}
 
 def _get_number_of_registered_users():
     db = get_db()
@@ -221,3 +251,6 @@ def _get_number_of_registered_users():
     c.execute("SELECT COUNT(*) FROM User")
     
     return c.fetchone()[0]
+
+# def send_to_socket(sock, data):
+#     sock.se

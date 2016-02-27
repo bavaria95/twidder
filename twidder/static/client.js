@@ -74,6 +74,7 @@ page('/browse', function() {
     window.history.state = 'browse';
 });
 
+var stats_socket;
 page('/stats', function() {
     if (!get_token()) {
         page('/');
@@ -92,14 +93,13 @@ page('/stats', function() {
     window.history.pushState(window.history.state, 'Stats');
     window.history.state = 'stats';
 
-    var stats_socket;
     stats_socket = new WebSocket("ws://" + document.domain + ":5000/stats");
     stats_socket.onopen = function (event) {
-        console.log('sending hello msg');
+        console.log('sending stats msg');
         stats_socket.send(get_token()); 
     };
     stats_socket.onmessage = function (event) {
-        console.log('redrawing', event)
+        console.log('redrawing', event.data)
     };
     stats_socket.onclose = function (event) {
         console.log('closed data socket', event);

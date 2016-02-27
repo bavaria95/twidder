@@ -1,6 +1,14 @@
 import os
 import binascii
 import json
+import database_helper
+
+from flask_sockets import Sockets
+
+def log(msg):
+    f = open('/home/bavaria/Coding/Twidder/logs.txt', 'a')
+    f.write(str(msg) + '\n')
+    f.close()
 
 # to store tokens and corresponded emails to it
 class Storage():
@@ -86,6 +94,10 @@ class StatsInfo():
         (sends nothing if nothing changed)
         '''
 
+        log(token)
+        log(data)
+        log('')
+
         if not token in self.d:
             return
 
@@ -96,15 +108,8 @@ class StatsInfo():
             except:
                 pass
 
-    def notify_all(self, data):
-        for t in self.d:
-            if self.d[t]['prev'] != data:
-                try:
-                    self.d[t]['socket'].send(json.dumps(data))
-                    self.d[t]['prev'] = data
-                except:
-                    pass
-
+    def all_subscribers(self):
+        return self.d.keys()
 
 
 def generate_random_token():

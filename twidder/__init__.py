@@ -3,8 +3,6 @@ import json
 import database_helper
 from flask.ext.cors import CORS
 
-from collections import deque
-
 from flask_sockets import Sockets
 
 
@@ -92,6 +90,7 @@ def sock(ws):
                     pass
 
             database_helper.socket_pool.add_socket(email, ws)
+            database_helper.notify_all_users()
         else:
             break
 
@@ -103,6 +102,7 @@ def stats_sock(ws):
         if msg is not None:
             token = msg
             database_helper.stats_info.add_entry(token, ws)
+            database_helper.notify_all_users()
         else:
             break
 
