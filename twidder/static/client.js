@@ -1,6 +1,11 @@
+
 page('/', function() {
-    if (get_token())
+    if (get_token()) {
         page('/account');
+        return;
+    }
+    window.history.pushState(window.history.state, 'Root');
+    window.history.state = 'root';
 });
 
 page('/account', function() {
@@ -15,6 +20,9 @@ page('/account', function() {
     document.getElementById('browse-view').style = "display: none;";
     highlight_label('account');
     reset_content_height();
+
+    window.history.pushState(window.history.state, 'Account');
+    window.history.state = 'account';
 });
 
 page('/home', function() {
@@ -32,6 +40,9 @@ page('/home', function() {
     reset_content_height();
     fill_user_info_fields('home', get_user_info());
     refresh_wall('home');
+
+    window.history.pushState(window.history.state, 'Home');
+    window.history.state = 'home';
 });
 
 page('/browse', function() {
@@ -53,6 +64,9 @@ page('/browse', function() {
     document.getElementById('search-field').value = '';
 
     reset_content_height();
+
+    window.history.pushState(window.history.state, 'Browse');
+    window.history.state = 'browse';
 });
 
 page('*', function(){
