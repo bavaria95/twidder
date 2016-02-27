@@ -115,6 +115,35 @@ page('*', function(){
 });
 
 
+draw_charts = function(data1, data2) {
+    var data = [
+    {
+        value: 300,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Red"
+    },
+    {
+        value: 50,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Green"
+    },
+    {
+        value: 100,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "Yellow"
+    }
+]
+
+var options = {};
+    
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myDoughnutChart = new Chart(ctx[1]).Doughnut(data, options);
+}
+
+
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
 
@@ -327,7 +356,7 @@ signout = function(forced) {
 
     if (forced)
         data['forced'] = true;
-    
+
     ajax_call("POST", "/sign_out", function(){}, data);
 
     localStorage.removeItem('token');

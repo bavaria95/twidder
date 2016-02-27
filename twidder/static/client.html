@@ -3,6 +3,7 @@
     	<title>Twidder</title>
        <link href="client.css" type="text/css" rel="stylesheet"> 
        <script src="https://cdn.rawgit.com/visionmedia/page.js/master/page.js"></script>   
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
        <script src="client.js" type="text/javascript"></script>
 
        <script type=”text/view” id="welcomeview">
@@ -206,9 +207,10 @@
 		</div>
 
 		<div id="stats-view" style="display:none;">
-		<div class="line" id="online">4</div>
-		<div class="line" id="registered">5</div>
-		<div class="line" id="number-on-the-wall">6</div>
+			<canvas id="myChart" width="400" height="400"></canvas>
+			<div class="line" id="online">4</div>
+			<div class="line" id="registered">5</div>
+			<div class="line" id="number-on-the-wall">6</div>
 		</div>
 
 	</div>
