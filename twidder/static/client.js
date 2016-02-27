@@ -95,13 +95,11 @@ page('/stats', function() {
 
     stats_socket = new WebSocket("ws://" + document.domain + ":5000/stats");
     stats_socket.onopen = function (event) {
-        console.log('sending stats msg');
         stats_socket.send(get_token()); 
     };
     stats_socket.onmessage = function (event) {
         var data = JSON.parse(event.data);
         draw_charts(data);
-        console.log('redrawing', JSON.parse(event.data))
     };
     stats_socket.onclose = function (event) {
         console.log('closed data socket', event);
@@ -309,7 +307,6 @@ login = function(email, password) {
             var login_socket;
             login_socket = new WebSocket("ws://" + document.domain + ":5000/sock");
             login_socket.onopen = function (event) {
-                // console.log('sending hello msg');
                 login_socket.send(email); 
             };
             login_socket.onmessage = function (event) {
