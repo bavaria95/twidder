@@ -28,9 +28,8 @@ ajax_call = function(method, path, func, data) {
 window.onload = function(){
     if (localStorage.getItem('token'))
         display_view('profileview');
-    else{
+    else
         display_view('welcomeview');
-    }
 }
 
 define_onclick_functions = function() {
@@ -87,6 +86,7 @@ display_view = function(view) {
 
     if (view == 'welcomeview') {
         document.getElementsByTagName("body")[0].style.background = "#6699ff";
+        window.history.pushState('welcome', 'Welcome', '/');
     }
     if (view == 'profileview') {
         define_onclick_functions();
@@ -327,6 +327,8 @@ activate_account = function() {
     document.getElementById('browse-view').style = "display: none;";
     highlight_label('account');
     reset_content_height();
+
+    window.history.pushState('account', 'Account', '/account');
 }
 
 
@@ -339,6 +341,8 @@ activate_home = function() {
     reset_content_height();
     fill_user_info_fields('home', get_user_info());
     refresh_wall('home');
+
+    window.history.pushState('home', 'Home', '/home');
 }
 fill_user_info_fields = function(tab, info) {
 
@@ -363,6 +367,8 @@ activate_browse = function() {
     document.getElementById('search-field').value = '';
 
     reset_content_height();
+
+    window.history.pushState('Browse', 'Browse', '/browse');
 }
 
 
