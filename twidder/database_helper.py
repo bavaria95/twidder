@@ -198,3 +198,14 @@ def get_user_messages_by_token(d):
 
     return get_user_messages_by_email({'token': token, 'email': email})
 
+def update(token):
+    registered = _get_number_of_registered_users()
+    print(registered)
+
+def _get_number_of_registered_users():
+    db = get_db()
+    c = db.cursor()
+
+    c.execute("SELECT COUNT(*) FROM User")
+    
+    return c.fetchone()[0]

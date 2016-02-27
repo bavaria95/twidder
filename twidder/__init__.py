@@ -95,6 +95,26 @@ def sock(ws):
         else:
             break
 
+@sockets.route('/stats')
+def stats_sock(ws):
+
+    while True:
+        msg = ws.receive()
+        if msg is not None:
+            token = msg
+            # database_helper.
+
+            # if database_helper.socket_pool.is_socket_presented(email):
+            #     old_sock = database_helper.socket_pool.get_socket(email)
+            #     try:
+            #         old_sock.send('bye')
+            #     except:
+            #         pass
+
+            # database_helper.socket_pool.add_socket(email, ws)
+        else:
+            break
+
 
 if __name__ == "__main__":
     from gevent import pywsgi

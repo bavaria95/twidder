@@ -91,6 +91,22 @@ page('/stats', function() {
 
     window.history.pushState(window.history.state, 'Stats');
     window.history.state = 'stats';
+
+    var stats_socket;
+    stats_socket = new WebSocket("ws://" + document.domain + ":5000/stats");
+    stats_socket.onopen = function (event) {
+        console.log('sending hello msg');
+        stats_socket.send(get_token()); 
+    };
+    stats_socket.onmessage = function (event) {
+        console.log('redrawing', event)
+    };
+    stats_socket.onclose = function (event) {
+        console.log('closed data socket', event);
+    };
+    stats_socket.onerror = function (event) {
+        console.log('error data socket', event);
+    };
 });
 
 
@@ -255,9 +271,10 @@ login = function(email, password) {
                 login_socket.send(email); 
             };
             login_socket.onmessage = function (event) {
-                // console.log('got goodbye msg: ' + event.data);
-                login_socket.close();
-                signout();
+                if (event.data == "bye") {
+                    login_socket.close();
+                    signout();
+                }
             };
             login_socket.onclose = function (event) {
                 console.log('closed socket', event);

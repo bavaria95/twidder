@@ -1,5 +1,6 @@
 import os
 import binascii
+import json
 
 # to store tokens and corresponded emails to it
 class Storage():
@@ -54,6 +55,53 @@ class SocketPool():
 
     def get_all_sockets(self):
         return self.d
+
+class StatsInfo():
+    def __init__(self):
+        self.d = {}
+
+    def add_entry(self, token, sock):
+        self.d[token] = {'socket': sock, 'prev': {'all_users': None,
+                                                  'online': None,
+                                                  'posts': None}}
+    
+    def is_entry_presented(self, token):
+        return token in self.d
+
+    def get_entry(self, token):
+        return self.d.get(token, None)
+
+    def remove_entry(self, token):
+        return self.d.pop(token)
+
+    def get_all_entries(self):
+        return self.d
+
+    def notify_by_token(self, token, data):
+        '''
+        Also takes care about necessity of notifying
+        (sends nothing if nothing changed)
+        '''
+
+        if not token in self.d:
+            return
+
+        if self.d[token]['prev'] != data:
+            try:
+                self.d[token]['socket'].send(json.dumps(data))
+                self.d[token]['prev'] = data
+            except:
+                pass
+
+    def notify_all(self, data):
+        for t in self.d:
+            if self.d[t]['prev'] != data:
+                try:
+                    self.d[t]['socket'].send(json.dumps(data))
+                    self.d[t]['prev'] = data
+                except:
+                    pass
+
 
 
 def generate_random_token():
