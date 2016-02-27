@@ -1,3 +1,64 @@
+page('/', function() {
+    if (get_token())
+        page('/account');
+});
+
+page('/account', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: block;";
+    document.getElementById('home-view').style = "display: none;";
+    document.getElementById('browse-view').style = "display: none;";
+    highlight_label('account');
+    reset_content_height();
+});
+
+page('/home', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: none;";
+    document.getElementById('home-view').style = "display: block;";
+    document.getElementById('browse-view').style = "display: none;";
+    highlight_label('home');
+
+    reset_content_height();
+    fill_user_info_fields('home', get_user_info());
+    refresh_wall('home');
+});
+
+page('/browse', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: none;";
+    document.getElementById('home-view').style = "display: none;";
+    document.getElementById('browse-view').style = "display: block;";
+    highlight_label('browse');
+
+    document.getElementById('profile-unfam').style = "display: none;";
+    document.getElementById('search-content').style = "display: block;";
+
+    document.getElementById('search-error').innerHTML = '';
+    document.getElementById('search-field').value = '';
+
+    reset_content_height();
+});
+
+page('*', function(){
+    page('/');
+});
+
 
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
@@ -396,65 +457,3 @@ show_profile = function(data) {
     fill_user_info_fields('browse', data);
     refresh_wall('browse', data.email);
 }
-
-page('/', function() {
-    if (get_token())
-        page('/account');
-});
-
-page('/account', function() {
-    if (!get_token()) {
-        page('/');
-        return;
-    }
-
-    display_view('profileview');
-    document.getElementById('account-view').style = "display: block;";
-    document.getElementById('home-view').style = "display: none;";
-    document.getElementById('browse-view').style = "display: none;";
-    highlight_label('account');
-    reset_content_height();
-});
-
-page('/home', function() {
-    if (!get_token()) {
-        page('/');
-        return;
-    }
-
-    display_view('profileview');
-    document.getElementById('account-view').style = "display: none;";
-    document.getElementById('home-view').style = "display: block;";
-    document.getElementById('browse-view').style = "display: none;";
-    highlight_label('home');
-
-    reset_content_height();
-    fill_user_info_fields('home', get_user_info());
-    refresh_wall('home');
-});
-
-page('/browse', function() {
-    if (!get_token()) {
-        page('/');
-        return;
-    }
-
-    display_view('profileview');
-    document.getElementById('account-view').style = "display: none;";
-    document.getElementById('home-view').style = "display: none;";
-    document.getElementById('browse-view').style = "display: block;";
-    highlight_label('browse');
-
-    document.getElementById('profile-unfam').style = "display: none;";
-    document.getElementById('search-content').style = "display: block;";
-
-    document.getElementById('search-error').innerHTML = '';
-    document.getElementById('search-field').value = '';
-
-    reset_content_height();
-});
-
-page('*', function(){
-    page('/');
-});
-
