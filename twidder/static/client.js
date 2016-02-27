@@ -1,26 +1,3 @@
-page('/', function(){
-  console.log('welcome');
-});
-
-page('/account', function(){
-  console.log('account');
-});
-
-page('/home', function(){
-  console.log('home');
-});
-
-page('/browse', function(){
-  console.log('browse');
-});
-
-page('*', function(){
-  console.error('Page not found :(');
-});
-
-page.start();
-
-
 
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
@@ -53,22 +30,23 @@ window.onload = function(){
         display_view('profileview');
     else
         display_view('welcomeview');
+    page.start();
 }
 
 define_onclick_functions = function() {
     var account_tab = document.getElementById("account-tab");
     account_tab.onclick = function() {
-        activate_account();
+        page('/account');
     }
 
     var home_tab = document.getElementById("home-tab");
     home_tab.onclick = function() {
-        activate_home();
+        page('/home')
     }
 
     var browse_tab = document.getElementById("browse-tab");
     browse_tab.onclick = function() {
-        activate_browse();
+        page('/browse');
     }
 
     var send_button_home = document.getElementById("status-send-home");
@@ -105,16 +83,25 @@ define_onclick_functions = function() {
 }
 
 display_view = function(view) {
-    document.getElementById('view').innerHTML = document.getElementById(view).innerHTML;
+    if (document.getElementById('view'))
+        document.getElementById('view').innerHTML = document.getElementById(view).innerHTML;
+    else {
+        var new_view = document.createElement("div");
+        var att = document.createAttribute("id");
+        att.value = "view";
+        new_view.setAttributeNode(att);
+        
+        document.body.appendChild(new_view);
+
+        document.getElementById('view').innerHTML = document.getElementById(view).innerHTML;
+    }
 
     if (view == 'welcomeview') {
         document.getElementsByTagName("body")[0].style.background = "#6699ff";
-        window.history.pushState('welcome', 'Welcome', '/');
     }
     if (view == 'profileview') {
         define_onclick_functions();
         document.getElementsByTagName("body")[0].style.background = "#FFF";
-        activate_account();
     }
 }
 
@@ -157,7 +144,7 @@ login = function(email, password) {
             localStorage.setItem('token', resp.data);
 
             display_view('profileview');
-            activate_account();
+            page('/account');
 
 
             var login_socket;
@@ -344,29 +331,7 @@ highlight_label = function(label) {
 
 }
 
-activate_account = function() {
-    document.getElementById('account-view').style = "display: block;";
-    document.getElementById('home-view').style = "display: none;";
-    document.getElementById('browse-view').style = "display: none;";
-    highlight_label('account');
-    reset_content_height();
 
-    window.history.pushState('account', 'Account', '/account');
-}
-
-
-activate_home = function() {
-    document.getElementById('account-view').style = "display: none;";
-    document.getElementById('home-view').style = "display: block;";
-    document.getElementById('browse-view').style = "display: none;";
-    highlight_label('home');
-
-    reset_content_height();
-    fill_user_info_fields('home', get_user_info());
-    refresh_wall('home');
-
-    window.history.pushState('home', 'Home', '/home');
-}
 fill_user_info_fields = function(tab, info) {
 
     document.getElementById(tab + '-email').innerHTML = info.email;
@@ -375,23 +340,6 @@ fill_user_info_fields = function(tab, info) {
     document.getElementById(tab + '-gender').innerHTML = info.gender;
     document.getElementById(tab + '-city').innerHTML = info.city;
     document.getElementById(tab + '-country').innerHTML = info.country;
-}
-
-activate_browse = function() {
-    document.getElementById('account-view').style = "display: none;";
-    document.getElementById('home-view').style = "display: none;";
-    document.getElementById('browse-view').style = "display: block;";
-    highlight_label('browse');
-
-    document.getElementById('profile-unfam').style = "display: none;";
-    document.getElementById('search-content').style = "display: block;";
-
-    document.getElementById('search-error').innerHTML = '';
-    document.getElementById('search-field').value = '';
-
-    reset_content_height();
-
-    window.history.pushState('Browse', 'Browse', '/browse');
 }
 
 
@@ -447,3 +395,53 @@ show_profile = function(data) {
     fill_user_info_fields('browse', data);
     refresh_wall('browse', data.email);
 }
+
+page('/', function(){
+    if (get_token())
+        page('/account');
+    else
+        window.history.pushState('welcome', '', '/welcome');
+
+});
+
+page('/account', function(){
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: block;";
+    document.getElementById('home-view').style = "display: none;";
+    document.getElementById('browse-view').style = "display: none;";
+    highlight_label('account');
+    reset_content_height();
+});
+
+page('/home', function(){
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: none;";
+    document.getElementById('home-view').style = "display: block;";
+    document.getElementById('browse-view').style = "display: none;";
+    highlight_label('home');
+
+    reset_content_height();
+    fill_user_info_fields('home', get_user_info());
+    refresh_wall('home');
+});
+
+page('/browse', function(){
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: none;";
+    document.getElementById('home-view').style = "display: none;";
+    document.getElementById('browse-view').style = "display: block;";
+    highlight_label('browse');
+
+    document.getElementById('profile-unfam').style = "display: none;";
+    document.getElementById('search-content').style = "display: block;";
+
+    document.getElementById('search-error').innerHTML = '';
+    document.getElementById('search-field').value = '';
+
+    reset_content_height();
+});
+
+page('*', function(){
+    console.log('Page not found :(');
+});
+
