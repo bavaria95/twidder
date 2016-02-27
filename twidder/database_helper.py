@@ -8,7 +8,10 @@ database_file = 'database.db'
 
 # instancing from Storage class, which takes care about logged users
 storage = helper.Storage()
+
 socket_pool = helper.SocketPool()
+
+stats_info = helper.StatsInfo()
 
 def connect_db():
     rv = sqlite3.connect(database_file)
@@ -200,7 +203,10 @@ def get_user_messages_by_token(d):
 
 def update(token):
     registered = _get_number_of_registered_users()
+    online = socket_pool.size()
+
     print(registered)
+    print(online)
 
 def _get_number_of_registered_users():
     db = get_db()

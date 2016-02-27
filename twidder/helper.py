@@ -56,6 +56,9 @@ class SocketPool():
     def get_all_sockets(self):
         return self.d
 
+    def size(self):
+        return len(self.d)
+
 class StatsInfo():
     def __init__(self):
         self.d = {}

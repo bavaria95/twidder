@@ -102,16 +102,7 @@ def stats_sock(ws):
         msg = ws.receive()
         if msg is not None:
             token = msg
-            # database_helper.
-
-            # if database_helper.socket_pool.is_socket_presented(email):
-            #     old_sock = database_helper.socket_pool.get_socket(email)
-            #     try:
-            #         old_sock.send('bye')
-            #     except:
-            #         pass
-
-            # database_helper.socket_pool.add_socket(email, ws)
+            database_helper.stats_info.add_entry(token, ws)
         else:
             break
 
