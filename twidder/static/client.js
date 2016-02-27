@@ -133,14 +133,11 @@ draw_charts = function(d) {
 
     // chart with number of posts
     data = {
-        labels: ["Posts"],
+        labels: ["Your", "All"],
         datasets: [{
-                    label: "My First dataset",
-                    fillColor: "#F7464A",
-                    strokeColor: "rgba(220,220,220,0.8)",
-                    highlightFill: "#FF5A5E",
-                    highlightStroke: "rgba(220,220,220,1)",
-                    data: [d['posts']]
+                    fillColor: "#583DDF",
+                    highlightFill: "#6553BF",
+                    data: [d['posts'], d['all_posts']]
                     }
                 ]
     };
