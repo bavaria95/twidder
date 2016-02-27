@@ -18,6 +18,8 @@ page('/account', function() {
     document.getElementById('account-view').style = "display: block;";
     document.getElementById('home-view').style = "display: none;";
     document.getElementById('browse-view').style = "display: none;";
+    document.getElementById('stats-view').style = "display: none;";
+
     highlight_label('account');
     reset_content_height();
 
@@ -35,6 +37,8 @@ page('/home', function() {
     document.getElementById('account-view').style = "display: none;";
     document.getElementById('home-view').style = "display: block;";
     document.getElementById('browse-view').style = "display: none;";
+    document.getElementById('stats-view').style = "display: none;";
+
     highlight_label('home');
 
     reset_content_height();
@@ -55,6 +59,7 @@ page('/browse', function() {
     document.getElementById('account-view').style = "display: none;";
     document.getElementById('home-view').style = "display: none;";
     document.getElementById('browse-view').style = "display: block;";
+    document.getElementById('stats-view').style = "display: none;";
     highlight_label('browse');
 
     document.getElementById('profile-unfam').style = "display: none;";
@@ -68,6 +73,26 @@ page('/browse', function() {
     window.history.pushState(window.history.state, 'Browse');
     window.history.state = 'browse';
 });
+
+page('/stats', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
+    display_view('profileview');
+    document.getElementById('account-view').style = "display: none;";
+    document.getElementById('home-view').style = "display: none;";
+    document.getElementById('browse-view').style = "display: none;";
+    document.getElementById('stats-view').style = "display: block;";
+
+    highlight_label('stats');
+    reset_content_height();
+
+    window.history.pushState(window.history.state, 'Stats');
+    window.history.state = 'stats';
+});
+
 
 page('*', function(){
     page('/');
@@ -122,6 +147,11 @@ define_onclick_functions = function() {
     var browse_tab = document.getElementById("browse-tab");
     browse_tab.onclick = function() {
         page('/browse');
+    }
+
+    var stats_tab = document.getElementById("stats-tab");
+    stats_tab.onclick = function() {
+        page('/stats');
     }
 
     var send_button_home = document.getElementById("status-send-home");

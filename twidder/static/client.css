@@ -118,7 +118,7 @@ label {
 #account-tab {
     float: left;
     height: 30px;
-    width: 33%;
+    width: 25%;
     text-align: center;
     background-color: #F000FF;
 }
@@ -126,20 +126,27 @@ label {
 #home-tab {
     float: left;
     height: 30px;
-    width: 33%;
+    width: 25%;
+    text-align: center;
+    background-color: #D0F07A;
+}
+
+#browse-tab {
+    float: left;
+    height: 30px;
+    width: 25%;
     text-align: center;
     background-color: #00FF00;
 }
 
-.info-label {
-    font-style: italic;
-}
-
-
-#browse-tab {
+#stats-tab {
     height: 30px;
     text-align: center;
     background-color: #00FFFF;
+}
+
+.info-label {
+    font-style: italic;
 }
 
 #content {
