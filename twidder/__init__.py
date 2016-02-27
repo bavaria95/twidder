@@ -5,6 +5,7 @@ from flask.ext.cors import CORS
 
 from flask_sockets import Sockets
 
+import helper
 
 app = Flask(__name__, static_url_path='')
 sockets = Sockets(app)
@@ -69,34 +70,44 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
 
+
 @app.errorhandler(404)
 def another(e):
     return app.send_static_file('client.html')
 
+@app.route("/all", methods=["GET"])
+def all():
+    helper.log(database_helper.socket_pool.get_all_sockets())
+    return 'done'
 
 @sockets.route('/sock')
 def sock(ws):
-
     while True:
         msg = ws.receive()
         if msg is not None:
             email = msg
 
+            helper.log('sockets')
+            helper.log(database_helper.socket_pool.get_all_sockets())
+
             if database_helper.socket_pool.is_socket_presented(email):
                 old_sock = database_helper.socket_pool.get_socket(email)
                 try:
                     old_sock.send('bye')
+                    database_helper.socket_pool.change_socket_by_email(email, ws)
                 except:
                     pass
+            else:
+                database_helper.socket_pool.add_socket(email, ws)
 
-            database_helper.socket_pool.add_socket(email, ws)
             database_helper.notify_all_users()
         else:
             break
 
+    database_helper.notify_all_users()
+
 @sockets.route('/stats')
 def stats_sock(ws):
-
     while True:
         msg = ws.receive()
         if msg is not None:

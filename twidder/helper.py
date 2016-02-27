@@ -45,6 +45,7 @@ class Storage():
             if email == v:
                 self.d.pop(k, None)
 
+
 class SocketPool():
     def __init__(self):
         self.d = {}
@@ -66,6 +67,10 @@ class SocketPool():
 
     def size(self):
         return len(self.d)
+
+    def change_socket_by_email(self, email, sock):
+        self.d[email] = sock
+
 
 class StatsInfo():
     def __init__(self):
@@ -93,10 +98,6 @@ class StatsInfo():
         Also takes care about necessity of notifying
         (sends nothing if nothing changed)
         '''
-
-        log(token)
-        log(data)
-        log('')
 
         if not token in self.d:
             return

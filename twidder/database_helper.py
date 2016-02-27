@@ -37,7 +37,6 @@ def _create_database_structure():
         db.cursor().executescript(f.read())
 
 def sign_up_user(d):
-    helper.log('reg')
     try:
         data = (d['email'], d['password'], d['firstname'], d['familyname'], d['gender'], d['city'], d['country'])
     except:
@@ -55,7 +54,6 @@ def sign_up_user(d):
     except:
         return {"success": False, "message": "User already exists."}
 
-    helper.log('reg')
     notify_all_users()
     return {"success": True, "message": "Successfully created a new user."}
 
@@ -81,14 +79,19 @@ def sign_in_user(d):
 
 def sign_out_user(d):
     token = d['token']
+    try:
+        if d['forced']:
+            forced = True
+    except:
+        forced = False
 
     if storage.is_token_presented(token):
         email = storage.get_user_email(token)
         storage.remove_user(token)
-        socket_pool.remove_socket(email)
+        if not forced:
+            socket_pool.remove_socket(email)
         
         notify_all_users()
-        helper.log('logout')
 
         return {"success": True, "message": "Successfully signed out."}
 
@@ -214,33 +217,25 @@ def get_user_messages_by_token(d):
     return get_user_messages_by_email({'token': token, 'email': email})
 
 def notify_user(token):
-    helper.log('notify_user')
     data = collect_information(token)
-    helper.log(data)
     stats_info.notify_by_token(token, data)
 
 def notify_all_users():
     tokens = stats_info.all_subscribers()
     for t in tokens:
         data = collect_information(t)
-        helper.log(data)
         stats_info.notify_by_token(t, data)
 
 def collect_information(token):
     registered = _get_number_of_registered_users()
-    online = socket_pool.size()
+    
     posts = get_user_messages_by_token({'token': token})
     if posts['success']:
         num_posts = len(posts['data'])
     else:
         num_posts = None
-
-    helper.log('collecting')
-    helper.log(registered)
-    helper.log(online)
-    helper.log(num_posts)
-    helper.log('collecting end')
-    helper.log('')
+    
+    online = socket_pool.size()
 
     return {'all_users': registered, 'online': online, 'posts': num_posts}
 
@@ -251,6 +246,3 @@ def _get_number_of_registered_users():
     c.execute("SELECT COUNT(*) FROM User")
     
     return c.fetchone()[0]
-
-# def send_to_socket(sock, data):
-#     sock.se

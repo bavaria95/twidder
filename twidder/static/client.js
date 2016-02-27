@@ -273,7 +273,7 @@ login = function(email, password) {
             login_socket.onmessage = function (event) {
                 if (event.data == "bye") {
                     login_socket.close();
-                    signout();
+                    signout(true);
                 }
             };
             login_socket.onclose = function (event) {
@@ -322,8 +322,12 @@ signup = function() {
     }
 }
 
-signout = function() {
+signout = function(forced) {
     var data = {'token': get_token()};
+
+    if (forced)
+        data['forced'] = true;
+    
     ajax_call("POST", "/sign_out", function(){}, data);
 
     localStorage.removeItem('token');
