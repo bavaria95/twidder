@@ -82,15 +82,15 @@ def sock(ws):
 
             if database_helper.socket_pool.is_socket_presented(email):
                 old_sock = database_helper.socket_pool.get_socket(email)
-                old_sock.send('bye')
-                database_helper.socket_pool.remove_socket(email)
+                try:
+                    old_sock.send('bye')
+                except:
+                    pass
 
             database_helper.socket_pool.add_socket(email, ws)
         else:
             break
 
-    # if email:
-    #     database_helper.socket_pool.remove_socket(email)
 
 if __name__ == "__main__":
     from gevent import pywsgi

@@ -78,7 +78,9 @@ def sign_out_user(d):
     token = d['token']
 
     if storage.is_token_presented(token):
+        email = storage.get_user_email(token)
         storage.remove_user(token)
+        socket_pool.remove_socket(email)
         return {"success": True, "message": "Successfully signed out."}
 
     return {"success": False, "message": "You are not signed in."}

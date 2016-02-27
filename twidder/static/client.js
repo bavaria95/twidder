@@ -1,8 +1,3 @@
-var login_socket;
-window.onbeforeunload = function(){
-    if (login_socket)
-        login_socket.close();
-}
 
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
@@ -33,8 +28,9 @@ ajax_call = function(method, path, func, data) {
 window.onload = function(){
     if (localStorage.getItem('token'))
         display_view('profileview');
-    else 
+    else{
         display_view('welcomeview');
+    }
 }
 
 define_onclick_functions = function() {
@@ -89,8 +85,9 @@ define_onclick_functions = function() {
 display_view = function(view) {
     document.getElementById('view').innerHTML = document.getElementById(view).innerHTML;
 
-    if (view == 'welcomeview')
+    if (view == 'welcomeview') {
         document.getElementsByTagName("body")[0].style.background = "#6699ff";
+    }
     if (view == 'profileview') {
         define_onclick_functions();
         document.getElementsByTagName("body")[0].style.background = "#FFF";
@@ -139,6 +136,8 @@ login = function(email, password) {
             display_view('profileview');
             activate_account();
 
+
+            var login_socket;
             login_socket = new WebSocket("ws://" + document.domain + ":5000/sock");
             login_socket.onopen = function (event) {
                 // console.log('sending hello msg');
@@ -287,13 +286,6 @@ get_token = function() {
 
 get_user_info = function() {
     token = get_token();
-
-    /* func = function(resp) {
-        return resp.data;
-    }
-
-    ajax_call("GET", "/get_user_data_by_token?token="+token, func);
-    // return serverstub.getUserDataByToken(token).data;*/
 
     url = 'http://127.0.0.1:5000';
 
