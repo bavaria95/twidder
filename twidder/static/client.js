@@ -210,6 +210,7 @@ signout = function() {
 
     localStorage.removeItem('token');
     display_view('welcomeview');
+    page('/');
 }
 
 search_method = function() {
@@ -396,15 +397,17 @@ show_profile = function(data) {
     refresh_wall('browse', data.email);
 }
 
-page('/', function(){
+page('/', function() {
     if (get_token())
         page('/account');
-    else
-        window.history.pushState('welcome', '', '/welcome');
-
 });
 
-page('/account', function(){
+page('/account', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
     display_view('profileview');
     document.getElementById('account-view').style = "display: block;";
     document.getElementById('home-view').style = "display: none;";
@@ -413,7 +416,12 @@ page('/account', function(){
     reset_content_height();
 });
 
-page('/home', function(){
+page('/home', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
     display_view('profileview');
     document.getElementById('account-view').style = "display: none;";
     document.getElementById('home-view').style = "display: block;";
@@ -425,7 +433,12 @@ page('/home', function(){
     refresh_wall('home');
 });
 
-page('/browse', function(){
+page('/browse', function() {
+    if (!get_token()) {
+        page('/');
+        return;
+    }
+
     display_view('profileview');
     document.getElementById('account-view').style = "display: none;";
     document.getElementById('home-view').style = "display: none;";
