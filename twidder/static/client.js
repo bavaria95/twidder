@@ -455,6 +455,6 @@ page('/browse', function() {
 });
 
 page('*', function(){
-    console.log('Page not found :(');
+    page('/');
 });
 
