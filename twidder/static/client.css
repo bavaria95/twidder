@@ -291,3 +291,24 @@ label {
     width: 200px;
     height: 50px;
 }
+
+
+#users-stats {
+    float: left;
+    margin: 40px;
+    margin-top: 10px;
+}
+
+#users-chart {
+    margin-top: 10px;
+}
+
+#posts-stats {
+    float: right;
+    margin: 40px;
+    margin-top: 10px;
+}
+
+#posts-chart {
+    margin-top: 10px;
+}
