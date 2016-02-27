@@ -118,20 +118,34 @@ page('*', function(){
 
 
 draw_charts = function(d) {
+    // chart with users' info
     var data = {
         labels: ["Online", "Registered"],
+        datasets: [{
+                    fillColor: "#F7464A",
+                    highlightFill: "#FF5A5E",
+                    data: [d['online'], d['all_users']]
+                    }
+                ]
+    };
+    var ctx = document.getElementById("users-chart").getContext("2d");
+    var users_chart = new Chart(ctx).Bar(data);
+
+    // chart with number of posts
+    data = {
+        labels: ["Posts"],
         datasets: [{
                     label: "My First dataset",
                     fillColor: "#F7464A",
                     strokeColor: "rgba(220,220,220,0.8)",
                     highlightFill: "#FF5A5E",
                     highlightStroke: "rgba(220,220,220,1)",
-                    data: [d['online'], d['all_users']]
+                    data: [d['posts']]
                     }
                 ]
     };
-    var ctx = document.getElementById("users-chart").getContext("2d");
-    var myDoughnutChart = new Chart(ctx).Bar(data);
+    ctx = document.getElementById("posts-chart").getContext("2d");
+    var posts_chart = new Chart(ctx).Bar(data);
 }
 
 
