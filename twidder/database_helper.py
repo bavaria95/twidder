@@ -55,7 +55,7 @@ def sign_up_user(d):
         return {"success": False, "message": "User already exists."}
 
     notify_all_users()
-    
+
     return {"success": True, "message": "Successfully created a new user."}
 
 
@@ -240,7 +240,10 @@ def collect_information(token):
     
     online = socket_pool.size()
 
-    return {'all_users': registered, 'online': online, 'posts': num_posts}
+    all_posts = _get_number_of_all_posts()
+
+    return {'all_users': registered, 'online': online, 'posts': num_posts,
+            'all_posts': all_posts}
 
 def _get_number_of_registered_users():
     db = get_db()
@@ -248,4 +251,12 @@ def _get_number_of_registered_users():
 
     c.execute("SELECT COUNT(*) FROM User")
     
+    return c.fetchone()[0]
+
+def _get_number_of_all_posts():
+    db = get_db()
+    c = db.cursor()
+
+    c.execute("SELECT COUNT(*) FROM Message")
+
     return c.fetchone()[0]

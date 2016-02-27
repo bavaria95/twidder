@@ -74,7 +74,8 @@ class StatsInfo():
     def add_entry(self, token, sock):
         self.d[token] = {'socket': sock, 'prev': {'all_users': None,
                                                   'online': None,
-                                                  'posts': None}}
+                                                  'posts': None,
+                                                  'all_posts': None}}
     
     def is_entry_presented(self, token):
         return token in self.d
