@@ -5,11 +5,6 @@ import database_helper
 
 from flask_sockets import Sockets
 
-def log(msg):
-    f = open('/home/bavaria/Coding/Twidder/logs.txt', 'a')
-    f.write(str(msg) + '\n')
-    f.close()
-
 # to store tokens and corresponded emails to it
 class Storage():
     def __init__(self):

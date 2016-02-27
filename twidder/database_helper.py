@@ -55,6 +55,7 @@ def sign_up_user(d):
         return {"success": False, "message": "User already exists."}
 
     notify_all_users()
+    
     return {"success": True, "message": "Successfully created a new user."}
 
 
@@ -82,6 +83,8 @@ def sign_out_user(d):
     try:
         if d['forced']:
             forced = True
+        else:
+            forced = False
     except:
         forced = False
 

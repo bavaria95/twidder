@@ -75,10 +75,6 @@ def get_user_messages_by_token():
 def another(e):
     return app.send_static_file('client.html')
 
-@app.route("/all", methods=["GET"])
-def all():
-    helper.log(database_helper.socket_pool.get_all_sockets())
-    return 'done'
 
 @sockets.route('/sock')
 def sock(ws):
@@ -86,9 +82,6 @@ def sock(ws):
         msg = ws.receive()
         if msg is not None:
             email = msg
-
-            helper.log('sockets')
-            helper.log(database_helper.socket_pool.get_all_sockets())
 
             if database_helper.socket_pool.is_socket_presented(email):
                 old_sock = database_helper.socket_pool.get_socket(email)
