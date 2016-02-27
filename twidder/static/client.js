@@ -116,8 +116,18 @@ page('*', function(){
     page('/');
 });
 
-
+var users_chart, posts_chart; 
 draw_charts = function(d) {
+    var users_ctx = document.getElementById("users-chart").getContext("2d");
+    var posts_ctx = document.getElementById("posts-chart").getContext("2d");
+
+    if (users_chart)
+        users_chart.destroy();
+    if (posts_chart)
+        posts_chart.destroy();
+
+
+
     // chart with users' info
     var data = {
         labels: ["Online", "Registered"],
@@ -128,8 +138,7 @@ draw_charts = function(d) {
                     }
                 ]
     };
-    var ctx = document.getElementById("users-chart").getContext("2d");
-    var users_chart = new Chart(ctx).Bar(data);
+    users_chart = new Chart(users_ctx).Bar(data);
 
     // chart with number of posts
     data = {
@@ -141,8 +150,10 @@ draw_charts = function(d) {
                     }
                 ]
     };
-    ctx = document.getElementById("posts-chart").getContext("2d");
-    var posts_chart = new Chart(ctx).Bar(data);
+
+    posts_chart = new Chart(posts_ctx).Bar(data);
+    document.getElementById("users-chart").innerHTML = '';
+    document.getElementById("posts-chart").innerHTML = '';
 }
 
 
