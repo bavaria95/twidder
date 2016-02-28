@@ -302,7 +302,7 @@ check_reg_correctness = function() {
 
 
 // implementing Diffie–Hellman key exchange
-compute_public_part = function() {
+compute_public_key = function() {
     // generator
     var g = 3;
     // diveder
@@ -311,7 +311,10 @@ compute_public_part = function() {
     // own secret value between 50 and 100
     var x = Math.floor((Math.random() * 50) + 50);
 
-    return Math.pow(g, x) % p;
+    var public_key = Math.pow(g, x) % p;
+    var key = {'public_key': public_key, 'secret_variable': x};
+
+    return key;
 }
 
 compute_secret_key = function() {
@@ -319,7 +322,9 @@ compute_secret_key = function() {
 }
 
 login = function(email, password) {
-    var data = {'email': email, 'password': password};
+    var key = compute_public_key();
+
+    var data = {'email': email, 'password': password, 'public_key': key['public_key']};
 
     func = function(resp) {
         if (!resp.success) 
