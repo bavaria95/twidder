@@ -5,7 +5,7 @@ BEGIN TRANSACTION;
 CREATE TABLE Message (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "To_email" TEXT REFERENCES User (Email) NOT NULL, "From_email" TEXT REFERENCES User (Email) NOT NULL, Content TEXT);
 
 -- Table: User
-CREATE TABLE User (Email TEXT PRIMARY KEY UNIQUE NOT NULL, Password TEXT (8) NOT NULL, Firstname TEXT, Familyname TEXT, Gender TEXT NOT NULL, City TEXT, Country TEXT);
+CREATE TABLE User (Email TEXT PRIMARY KEY UNIQUE NOT NULL, Password TEXT (8) NOT NULL, Firstname TEXT, Familyname TEXT, Gender TEXT NOT NULL, City TEXT, Country TEXT, Secret INTEGER);
 
 -- Index: To_whom_message
 CREATE INDEX To_whom_message ON Message ("To_email");

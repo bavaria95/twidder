@@ -300,6 +300,24 @@ check_reg_correctness = function() {
     return status;
 }
 
+
+// implementing Diffie–Hellman key exchange
+compute_public_part = function() {
+    // generator
+    var g = 3;
+    // diveder
+    var p = 17;
+
+    // own secret value between 50 and 100
+    var x = Math.floor((Math.random() * 50) + 50);
+
+    return Math.pow(g, x) % p;
+}
+
+compute_secret_key = function() {
+
+}
+
 login = function(email, password) {
     var data = {'email': email, 'password': password};
 
