@@ -308,8 +308,8 @@ check_reg_correctness = function() {
 
 // implementing Diffie–Hellman key exchange
 compute_public_key = function() {
-    // own secret value between 50 and 100
-    var x = Math.floor((Math.random() * 50) + 50);
+    // own secret value between 100 and 500
+    var x = Math.floor((Math.random() * 400) + 100);
 
     var public_key = Math.pow(g, x) % p;
     var key = {'public_key': public_key, 'secret_variable': x};
