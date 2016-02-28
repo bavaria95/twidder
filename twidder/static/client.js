@@ -114,6 +114,10 @@ page('*', function(){
     page('/');
 });
 
+hash = function(str) {
+    return CryptoJS.SHA3(str).toString();
+}
+
 var users_chart, posts_chart; 
 draw_charts = function(d) {
     var users_ctx = document.getElementById("users-chart").getContext("2d");
