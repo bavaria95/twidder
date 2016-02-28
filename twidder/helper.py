@@ -2,8 +2,27 @@ import os
 import binascii
 import json
 import database_helper
+import random
 
 from flask_sockets import Sockets
+
+# generator
+g = 3
+# divider
+p = 17
+
+
+# implementing Diffie–Hellman key exchange
+def compute_public_key():
+    y = random.randrange(100, 500)
+
+    public_key = g**y % p
+
+    return {'public_key': public_key, 'secret_variable': y}
+
+def compute_secret_key(client_public, y):
+    return client_public**y % p
+    
 
 # to store tokens and corresponded emails to it
 class Storage():
