@@ -272,6 +272,11 @@ display_view = function(view) {
 
 display_error_msg = function(id, msg) {
     document.getElementById(id).innerHTML = msg;
+
+    // forcing to disappear notification after 3 seconds
+    setTimeout(function() {
+                document.getElementById(id).innerHTML = '';
+                }, 3000);
 }
 
 check_reg_correctness = function() {
