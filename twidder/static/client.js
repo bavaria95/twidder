@@ -335,7 +335,7 @@ login = function(email, password) {
 login_form = function() {
     var form = document.forms['login-form'];
     var email = form['email'].value;
-    var password = form['pass'].value;
+    var password = hash(form['pass'].value);
 
     login(email, password); 
 }
@@ -349,7 +349,7 @@ signup = function() {
         city: form['city'].value,
         country: form['country'].value,
         email: form['email'].value,
-        password: form['pass'].value
+        password: hash(form['pass'].value)
     };
 
 
@@ -524,12 +524,13 @@ change_password = function() {
         error_msg = "Password has to be longer than 8 symbols";
 
     if (error_msg != '') {
+        document.getElementById('change-error').style.color = "FF0000";
         display_error_msg("change-error", error_msg);
         return false;
     }
 
-    var data = {'token': get_token(), 'old_password': current, 
-                'new_password': pass1};
+    var data = {'token': get_token(), 'old_password': hash(current), 
+                'new_password': hash(pass1)};
 
     func = function(resp) {
         if (!resp.success) {
