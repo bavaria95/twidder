@@ -6,15 +6,16 @@ import random
 
 from flask_sockets import Sockets
 
+# implementing Diffie-Hellman key exchange algorithm
+
 # generator
 g = 3
 # divider
 p = 17
 
 
-# implementing Diffie–Hellman key exchange
 def compute_public_key():
-    y = random.randrange(100, 500)
+    y = random.randrange(50, 100)
 
     public_key = g**y % p
 
@@ -22,24 +23,33 @@ def compute_public_key():
 
 def compute_secret_key(client_public, y):
     return client_public**y % p
-    
+
 
 # to store tokens and corresponded emails to it
 class Storage():
     def __init__(self):
         self.d = {}
 
-    def add_user(self, token, email):
+    def add_user(self, token, email, secret):
         if token in self.d:
             raise 'Token is used.'
 
-        self.d[token] = email
+        self.d[token] = {'email': email, 'secret': secret}
 
     def remove_user(self, token):
         self.d.pop(token, None)
 
     def get_user_email(self, token):
-        return self.d.get(token)
+        res = self.d.get(token)
+        if res:
+            return res['email']
+        return None
+
+    def get_user_secret(self, token):
+        res = self.d.get(token)
+        if res:
+            return res['secret']
+        return None
 
     def is_token_presented(self, token):
         return token in self.d
@@ -50,13 +60,13 @@ class Storage():
     def get_token_by_email(self, email):
         res = []
         for k,v in self.d.iteritems():
-            if v == email:
+            if v['email'] == email:
                 res.append(k)
         return res
 
     def remove_token_by_email(self, email):
         for k,v in list(self.d.iteritems())[:]:
-            if email == v:
+            if v['email'] == email:
                 self.d.pop(k, None)
 
 

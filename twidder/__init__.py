@@ -69,11 +69,7 @@ def get_user_messages_by_email():
 def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
-
-# @app.route("/init", methods=["GET"])
-# def init():
-#     database_helper._create_database_structure()
-#     return ''
+    
 
 @app.errorhandler(404)
 def another(e):

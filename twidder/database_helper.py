@@ -61,6 +61,7 @@ def sign_up_user(d):
 
 def sign_in_user(d):
     data = (d['email'], d['password'])
+    client_public_key = int(d['public_key'])
 
     try:
         db = get_db()
@@ -70,10 +71,16 @@ def sign_in_user(d):
 
     c.execute("SELECT COUNT(*) FROM User WHERE Email=? AND Password=?", data)
     if c.fetchone()[0] == 1:
+        server_public_key = helper.compute_public_key()
+
+        secret_key = helper.compute_secret_key(client_public_key,
+                                               server_public_key['secret_variable'])
+
         token = helper.generate_random_token()
-        storage.add_user(token, d['email'])
+        storage.add_user(token, d['email'], secret_key)
         
-        return {"success": True, "message": "Successfully signed in.", "data": token}
+        return {"success": True, "message": "Successfully signed in.",
+                "data": token, "key": server_public_key['public_key']}
 
     return {"success": False, "message": "Wrong username or password."}
 

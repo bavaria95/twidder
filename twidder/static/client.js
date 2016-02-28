@@ -308,8 +308,8 @@ check_reg_correctness = function() {
 
 // implementing Diffie–Hellman key exchange
 compute_public_key = function() {
-    // own secret value between 100 and 500
-    var x = Math.floor((Math.random() * 400) + 100);
+    // own secret value between 0 and 10
+    var x = Math.floor((Math.random() * 10));
 
     var public_key = Math.pow(g, x) % p;
     var key = {'public_key': public_key, 'secret_variable': x};
@@ -318,7 +318,7 @@ compute_public_key = function() {
 }
 
 compute_secret_key = function(server_public, x) {
-    return Math.pow(server_public, x) % p;
+    return Math.pow(parseInt(server_public), x) % p;
 }
 
 login = function(email, password) {
@@ -359,7 +359,7 @@ login = function(email, password) {
 
         }
     }
-
+    console.log(data);
     ajax_call("POST", "/sign_in", func, data);
 }
 
@@ -405,6 +405,8 @@ signout = function(forced) {
     ajax_call("POST", "/sign_out", function(){}, data);
 
     localStorage.removeItem('token');
+    localStorage.removeItem('secret');
+
     display_view('welcomeview');
     page('/');
 }
