@@ -3,6 +3,8 @@ import binascii
 import json
 import database_helper
 import random
+import hmac
+import hashlib
 
 from flask_sockets import Sockets
 
@@ -23,6 +25,18 @@ def compute_public_key():
 
 def compute_secret_key(client_public, y):
     return client_public**y % p
+
+def is_legid(message, exp_hash):
+    '''
+    checks whether received message is correct(expected and actual hash-sum match)
+    '''
+
+    token = message['token']
+    secret_key = database_helper.storage.get_user_secret(token)
+    
+    actual_hash = hmac.new(secret_key, message, libhash.sha1).hexdigest()
+
+    return exp_hash == actual_hash
 
 
 # to store tokens and corresponded emails to it

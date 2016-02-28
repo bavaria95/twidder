@@ -189,7 +189,8 @@ ajax_call = function(method, path, func, data) {
 
     if (method != "GET") {
         xhttp.setRequestHeader("Content-Type", "application/json");
-        console.log(data);
+
+        // when log in - sending without hash
         if (path != "/sign_in") {
             var mes_hash = hash_message(data);
             var data_with_hash = {'data': data, 'hash': mes_hash};
