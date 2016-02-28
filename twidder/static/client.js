@@ -192,9 +192,8 @@ ajax_call = function(method, path, func, data) {
         console.log(data);
         if (path != "/sign_in") {
             var mes_hash = hash_message(data);
-            var data_with_hash = Object.assign(JSON.parse(JSON.stringify(data)), mes_hash);
-            console.log(data);
-            console.log(data_with_hash);
+            var data_with_hash = {'data': data, 'hash': mes_hash};
+            
             xhttp.send(JSON.stringify(data_with_hash));
         }
         else
