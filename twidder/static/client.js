@@ -133,8 +133,6 @@ draw_charts = function(d) {
     if (posts_chart)
         posts_chart.destroy();
 
-
-
     // chart with users' info
     var data = {
         labels: ["Online", "Registered"],
@@ -163,6 +161,13 @@ draw_charts = function(d) {
     document.getElementById("posts-chart").innerHTML = '';
 }
 
+hash_message = function(data) {
+    var key = get_secret();
+    var message = JSON.stringify(data);
+    console.log(key, message)
+
+    return {'hash': CryptoJS.HmacSHA1(message, key).toString()};
+}
 
 ajax_call = function(method, path, func, data) {
     url = 'http://127.0.0.1:5000';
@@ -184,7 +189,16 @@ ajax_call = function(method, path, func, data) {
 
     if (method != "GET") {
         xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send(JSON.stringify(data));
+        console.log(data);
+        if (path != "/sign_in") {
+            var mes_hash = hash_message(data);
+            var data_with_hash = Object.assign(JSON.parse(JSON.stringify(data)), mes_hash);
+            console.log(data);
+            console.log(data_with_hash);
+            xhttp.send(JSON.stringify(data_with_hash));
+        }
+        else
+            xhttp.send(JSON.stringify(data));
     }
     else
         xhttp.send();
@@ -491,6 +505,10 @@ reset_content_height = function() {
 
 get_token = function() {
     return localStorage.getItem('token');
+}
+
+get_secret = function() {
+    return localStorage.getItem('secret');
 }
 
 get_user_info = function() {
