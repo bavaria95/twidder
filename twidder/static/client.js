@@ -1,3 +1,8 @@
+// generator
+var g = 3;
+// divider
+var p = 17;
+
 
 page('/', function() {
     if (get_token()) {
@@ -303,11 +308,6 @@ check_reg_correctness = function() {
 
 // implementing Diffie–Hellman key exchange
 compute_public_key = function() {
-    // generator
-    var g = 3;
-    // diveder
-    var p = 17;
-
     // own secret value between 50 and 100
     var x = Math.floor((Math.random() * 50) + 50);
 
@@ -317,8 +317,8 @@ compute_public_key = function() {
     return key;
 }
 
-compute_secret_key = function() {
-
+compute_secret_key = function(server_public, x) {
+    return Math.pow(server_public, x) % p;
 }
 
 login = function(email, password) {
@@ -330,6 +330,9 @@ login = function(email, password) {
         if (!resp.success) 
             display_error_msg("error-log", resp.message);
         else {
+            var secret_key = compute_secret_key(resp.key, key['secret_variable']);
+            localStorage.setItem('secret', secret_key);
+
             localStorage.setItem('token', resp.data);
 
             display_view('profileview');
