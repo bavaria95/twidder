@@ -127,7 +127,7 @@ var users_chart, posts_chart;
 draw_charts = function(d) {
     if (!document.getElementById("users-chart") || !document.getElementById("posts-chart"))
         return;
-    
+
     var users_ctx = document.getElementById("users-chart").getContext("2d");
     var posts_ctx = document.getElementById("posts-chart").getContext("2d");
 
@@ -181,7 +181,7 @@ hash_message = function(data) {
 }
 
 ajax_call = function(method, path, func, data) {
-    url = 'http://127.0.0.1:5000';
+    url = document.domain + ':5000';
 
     var xhttp = new XMLHttpRequest();
 
@@ -526,7 +526,7 @@ get_secret = function() {
 get_user_info = function() {
     token = get_token();
 
-    url = 'http://127.0.0.1:5000';
+    url = document.domain + ':5000';
 
     var xhttp = new XMLHttpRequest();
 
