@@ -181,7 +181,7 @@ hash_message = function(data) {
 }
 
 ajax_call = function(method, path, func, data) {
-    url = document.domain + ':5000';
+    url = "http://" + document.domain + ':5000';
 
     var xhttp = new XMLHttpRequest();
 
@@ -526,7 +526,7 @@ get_secret = function() {
 get_user_info = function() {
     token = get_token();
 
-    url = document.domain + ':5000';
+    url = "http://" + document.domain + ':5000';
 
     var xhttp = new XMLHttpRequest();
 
