@@ -100,11 +100,12 @@ page('/stats', function() {
 
     stats_socket = new WebSocket("ws://" + document.domain + ":5000/stats");
     stats_socket.onopen = function (event) {
+        console.log('sending own token', get_token());
         stats_socket.send(get_token()); 
     };
     stats_socket.onmessage = function (event) {
         var data = JSON.parse(event.data);
-        console.log(data);
+        console.log('got data', data);
         draw_charts(data);
     };
     stats_socket.onclose = function (event) {
