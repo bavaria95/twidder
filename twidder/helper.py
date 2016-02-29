@@ -5,6 +5,7 @@ import database_helper
 import random
 import hmac
 import hashlib
+import time
 
 from flask_sockets import Sockets
 
@@ -31,7 +32,7 @@ def compute_secret_key(client_public, y):
     return client_public**y % p
 
 
-def is_legid(message, exp_hash):
+def is_legid(message, exp_hash, timestamp):
     '''
     checks whether received message is correct(expected and actual hash-sum match)
     '''
@@ -39,8 +40,11 @@ def is_legid(message, exp_hash):
     token = message['token']
     secret_key = database_helper.storage.get_user_secret(token)
 
+    message_string = ''.join([message[x] for x in sorted(message.keys())])
+    message_string += str(timestamp)
+    
     actual_hash = hmac.new(str(secret_key),
-                           ''.join([message[x] for x in sorted(message.keys())]),
+                           message_string,
                            hashlib.sha1).hexdigest()
 
     return exp_hash == actual_hash

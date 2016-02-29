@@ -164,14 +164,17 @@ draw_charts = function(d) {
 hash_message = function(data) {
     var key = get_secret();
 
+    var timestamp = Math.floor(Date.now() / 1000);
     // due to different json formating of the string in js and python
     // gathering only values in a row
     var message = '';
     for (var prop of Object.keys(data).sort()) {
         message += data[prop];
     }
+    message += timestamp.toString();
 
-    return {'hash': CryptoJS.HmacSHA1(message, key).toString()};
+    return {'hash': CryptoJS.HmacSHA1(message, key).toString(),
+            'timestamp': timestamp};
 }
 
 ajax_call = function(method, path, func, data) {
@@ -200,7 +203,9 @@ ajax_call = function(method, path, func, data) {
         // when log in or sign up - sending without hash
         if (path != "/sign_in" && path != "/sign_up") {
             var mes_hash = hash_message(data);
-            var data_with_hash = {'data': data, 'hash': mes_hash['hash']};
+            var data_with_hash = {'data': data, 'hash': mes_hash['hash'],
+                                  'timestamp': mes_hash['timestamp']};
+
             xhttp.send(JSON.stringify(data_with_hash));
         }
         else
@@ -247,17 +252,17 @@ define_onclick_functions = function() {
         send_button('browse');
     }
 
-
     var refresh_button_home = document.getElementById("wall-refresh-home");
     refresh_button_home.onclick = function() {
         refresh_wall('home');
     }
 
     var refresh_button_browse = document.getElementById("wall-refresh-browse");
-    refresh_button_home.onclick = function() {
-        refresh_wall('browse', get_user_info().email);
-    }
+    refresh_button_browse.onclick = function() {
+        var email_found = document.getElementById("search-field").value;
 
+        refresh_wall('browse', email_found);
+    }
 
     var signout_button = document.getElementById("sign-out");
     signout_button.onclick = function() {
@@ -529,7 +534,7 @@ get_user_info = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
 
             var resp = JSON.parse(xhttp.responseText);
-
+            
             return resp.data;
 
             console.log(JSON.parse(xhttp.responseText));

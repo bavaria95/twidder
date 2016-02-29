@@ -91,8 +91,9 @@ def sign_out_user(m):
     else:
         d = m['data']
         h = m['hash']
+        t = m['timestamp']
 
-        if not helper.is_legid(d, h):
+        if not helper.is_legid(d, h, t):
             return {"success": False, "message": "You're not autorized to see this."}
 
 
@@ -122,8 +123,9 @@ def sign_out_user(m):
 def change_password(m):
     d = m['data']
     h = m['hash']
+    t = m['timestamp']
 
-    if not helper.is_legid(d, h):
+    if not helper.is_legid(d, h, t):
         return {"success": False, "message": "You're not autorized to see this."}
 
     token = d['token']
@@ -153,12 +155,6 @@ def change_password(m):
     return {"success": False, "message": "Wrong password."}
 
 def get_user_data_by_email(d):
-    # d = m['data']
-    # h = m['hash']
-
-    # if not helper.is_legid(d, h):
-    #     return {"success": False, "message": "You're not autorized to see this."}
-
     token = d['token']
     email = d['email']
 
@@ -183,12 +179,6 @@ def get_user_data_by_email(d):
     return {"success": True, "message": "User data retrieved.", "data": data}
 
 def get_user_data_by_token(d):
-    # d = m['data']
-    # h = m['hash']
-
-    # if not helper.is_legid(d, h):
-    #     return {"success": False, "message": "You're not autorized to see this."}
-
     token = d['token']
 
     email = storage.get_user_email(token)
@@ -198,8 +188,9 @@ def get_user_data_by_token(d):
 def post_message(m):
     d = m['data']
     h = m['hash']
+    t = m['timestamp']
 
-    if not helper.is_legid(d, h):
+    if not helper.is_legid(d, h, t):
         return {"success": False, "message": "You're not autorized to see this."}
 
     token = d['token']
@@ -238,8 +229,9 @@ def get_user_messages_by_email(m, local=False):
     if not local:
         d = m['data']
         h = m['hash']
+        t = m['timestamp']
 
-        if not helper.is_legid(d, h):
+        if not helper.is_legid(d, h, t):
             return {"success": False, "message": "You're not autorized to see this."}
     else:
         d = m
@@ -271,8 +263,9 @@ def get_user_messages_by_token(m, local=False):
     else:
         d = m['data']
         h = m['hash']
+        t = m['timestamp']
 
-        if not helper.is_legid(d, h):
+        if not helper.is_legid(d, h, t):
             return {"success": False, "message": "You're not autorized to see this."}
 
     token = d['token']
