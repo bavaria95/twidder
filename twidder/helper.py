@@ -15,6 +15,10 @@ g = 3
 # divider
 p = 17
 
+def log(msg):
+    f = open('log.txt', 'a')
+    f.write(str(msg) + '\n')
+    f.close()
 
 def compute_public_key():
     y = random.randrange(50, 100)
@@ -30,12 +34,18 @@ def is_legid(message, exp_hash):
     '''
     checks whether received message is correct(expected and actual hash-sum match)
     '''
+    log('FUNC')
+    log(json.dumps(message))
+    log(exp_hash)
 
     token = message['token']
+    log(token)
     secret_key = database_helper.storage.get_user_secret(token)
-    
-    actual_hash = hmac.new(secret_key, message, libhash.sha1).hexdigest()
-
+    log(secret_key)
+    log(''.join(message.values()))
+    actual_hash = hmac.new(str(secret_key), ''.join(message.values()), hashlib.sha1).hexdigest()
+    log(actual_hash)
+    log('//FUNC')
     return exp_hash == actual_hash
 
 

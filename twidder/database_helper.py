@@ -85,8 +85,24 @@ def sign_in_user(d):
     return {"success": False, "message": "Wrong username or password."}
 
 
-def sign_out_user(d):
+def sign_out_user(m):
+    if 'forced' in m['data']:
+        d = m['data']
+        helper.log('forced')
+        helper.log(d)
+    else:
+        d = m['data']
+        h = m['hash']
+        helper.log('not forced')
+        helper.log(d)
+        helper.log(h)
+
+        if not helper.is_legid(d, h):
+            return {"success": False, "message": "You're not autorized to see this."}
+
+
     token = d['token']
+    helper.log(token)
     try:
         if d['forced']:
             forced = True
@@ -108,7 +124,13 @@ def sign_out_user(d):
 
     return {"success": False, "message": "You are not signed in."}
 
-def change_password(d):
+def change_password(m):
+    d = m['data']
+    h = m['hash']
+
+    if not helper.is_legid(d, h):
+        return {"success": False, "message": "You're not autorized to see this."}
+
     token = d['token']
     old_pass = d['old_password']
     new_pass = d['new_password']
@@ -136,6 +158,12 @@ def change_password(d):
     return {"success": False, "message": "Wrong password."}
 
 def get_user_data_by_email(d):
+    # d = m['data']
+    # h = m['hash']
+
+    # if not helper.is_legid(d, h):
+    #     return {"success": False, "message": "You're not autorized to see this."}
+
     token = d['token']
     email = d['email']
 
@@ -160,13 +188,25 @@ def get_user_data_by_email(d):
     return {"success": True, "message": "User data retrieved.", "data": data}
 
 def get_user_data_by_token(d):
+    # d = m['data']
+    # h = m['hash']
+
+    # if not helper.is_legid(d, h):
+    #     return {"success": False, "message": "You're not autorized to see this."}
+
     token = d['token']
 
     email = storage.get_user_email(token)
 
     return get_user_data_by_email({'token': token, 'email': email})
 
-def post_message(d):
+def post_message(m):
+    d = m['data']
+    h = m['hash']
+
+    if not helper.is_legid(d, h):
+        return {"success": False, "message": "You're not autorized to see this."}
+
     token = d['token']
     message = d['message']
     to_email = d['email']
@@ -197,7 +237,18 @@ def post_message(d):
 
     return {"success": True, "message": "Message posted"}
 
-def get_user_messages_by_email(d):
+def get_user_messages_by_email(m, local=False):
+    # local means this this query is from internal source and there is
+    # no need to check legitimacy of user
+    if not local:
+        d = m['data']
+        h = m['hash']
+
+        if not helper.is_legid(d, h):
+            return {"success": False, "message": "You're not autorized to see this."}
+    else:
+        d = m
+
     token = d['token']
     email = d['email']
 
@@ -219,12 +270,18 @@ def get_user_messages_by_email(d):
 
     return {"success": True, "message": "User messages retrieved.", "data": match}
 
-def get_user_messages_by_token(d):
+def get_user_messages_by_token(m):
+    d = m['data']
+    h = m['hash']
+
+    if not helper.is_legid(d, h):
+        return {"success": False, "message": "You're not autorized to see this."}
+
     token = d['token']
 
     email = storage.get_user_email(token)
 
-    return get_user_messages_by_email({'token': token, 'email': email})
+    return get_user_messages_by_email({'token': token, 'email': email}, True)
 
 def notify_user(token):
     data = collect_information(token)

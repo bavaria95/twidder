@@ -104,6 +104,7 @@ page('/stats', function() {
     };
     stats_socket.onmessage = function (event) {
         var data = JSON.parse(event.data);
+        console.log(data);
         draw_charts(data);
     };
     stats_socket.onclose = function (event) {
@@ -163,10 +164,16 @@ draw_charts = function(d) {
 
 hash_message = function(data) {
     var key = get_secret();
-    var message = JSON.stringify(data);
-    console.log(key, message)
+    // var message = JSON.stringify(data);
 
-    return {'hash': CryptoJS.HmacSHA1(message, key).toString()};
+    // due to different json formating of the string in js and python
+    // gathering only values in a row
+    var s = '';
+    for (var prop in data)
+        s += data[prop];
+    console.log(s);
+
+    return {'hash': CryptoJS.HmacSHA1(s, key).toString()};
 }
 
 ajax_call = function(method, path, func, data) {
@@ -190,11 +197,11 @@ ajax_call = function(method, path, func, data) {
     if (method != "GET") {
         xhttp.setRequestHeader("Content-Type", "application/json");
 
-        // when log in - sending without hash
-        if (path != "/sign_in") {
+        // when log in or sign up - sending without hash
+        if (path != "/sign_in" && path != "/sign_up") {
             var mes_hash = hash_message(data);
-            var data_with_hash = {'data': data, 'hash': mes_hash};
-            
+            var data_with_hash = {'data': data, 'hash': mes_hash['hash']};
+            console.log(data_with_hash);
             xhttp.send(JSON.stringify(data_with_hash));
         }
         else
