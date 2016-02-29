@@ -37,12 +37,17 @@ def is_legid(message, exp_hash, timestamp):
     checks whether received message is correct(expected and actual hash-sum match)
     '''
 
+    actual_timestamp = int(time.time())
+    # if message is older than 10 seconds - drop it
+    if abs(actual_timestamp - timestamp) > 10:
+        return False
+
     token = message['token']
     secret_key = database_helper.storage.get_user_secret(token)
 
     message_string = ''.join([message[x] for x in sorted(message.keys())])
     message_string += str(timestamp)
-    
+
     actual_hash = hmac.new(str(secret_key),
                            message_string,
                            hashlib.sha1).hexdigest()
