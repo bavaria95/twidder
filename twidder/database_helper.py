@@ -252,7 +252,7 @@ def get_user_messages_by_email(m, local=False):
     if c.fetchone()[0] != 1:
         return {"success": False, "message": "No such user."}
 
-    c.execute("SELECT * FROM Message WHERE To_email=?", (email, ))
+    c.execute("SELECT * FROM Message WHERE To_email=? ORDER BY ID DESC", (email, ))
     match = map(lambda x: {'writer': x[2], 'content': x[3]}, c.fetchall())
 
     return {"success": True, "message": "User messages retrieved.", "data": match}
