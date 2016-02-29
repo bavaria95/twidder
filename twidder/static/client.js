@@ -124,7 +124,10 @@ hash = function(str) {
 }
 
 var users_chart, posts_chart; 
-draw_charts = function(d) { 
+draw_charts = function(d) {
+    if (!document.getElementById("users-chart") || !document.getElementById("posts-chart"))
+        return;
+    
     var users_ctx = document.getElementById("users-chart").getContext("2d");
     var posts_ctx = document.getElementById("posts-chart").getContext("2d");
 
