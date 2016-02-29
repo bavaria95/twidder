@@ -30,22 +30,19 @@ def compute_public_key():
 def compute_secret_key(client_public, y):
     return client_public**y % p
 
+
 def is_legid(message, exp_hash):
     '''
     checks whether received message is correct(expected and actual hash-sum match)
     '''
-    log('FUNC')
-    log(json.dumps(message))
-    log(exp_hash)
 
     token = message['token']
-    log(token)
     secret_key = database_helper.storage.get_user_secret(token)
-    log(secret_key)
-    log(''.join(message.values()))
-    actual_hash = hmac.new(str(secret_key), ''.join(message.values()), hashlib.sha1).hexdigest()
-    log(actual_hash)
-    log('//FUNC')
+
+    actual_hash = hmac.new(str(secret_key),
+                           ''.join([message[x] for x in sorted(message.keys())]),
+                           hashlib.sha1).hexdigest()
+
     return exp_hash == actual_hash
 
 

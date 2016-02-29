@@ -100,12 +100,10 @@ page('/stats', function() {
 
     stats_socket = new WebSocket("ws://" + document.domain + ":5000/stats");
     stats_socket.onopen = function (event) {
-        console.log('sending own token', get_token());
         stats_socket.send(get_token()); 
     };
     stats_socket.onmessage = function (event) {
         var data = JSON.parse(event.data);
-        console.log('got data', data);
         draw_charts(data);
     };
     stats_socket.onclose = function (event) {
@@ -165,16 +163,15 @@ draw_charts = function(d) {
 
 hash_message = function(data) {
     var key = get_secret();
-    // var message = JSON.stringify(data);
 
     // due to different json formating of the string in js and python
     // gathering only values in a row
-    var s = '';
-    for (var prop in data)
-        s += data[prop];
-    console.log(s);
+    var message = '';
+    for (var prop of Object.keys(data).sort()) {
+        message += data[prop];
+    }
 
-    return {'hash': CryptoJS.HmacSHA1(s, key).toString()};
+    return {'hash': CryptoJS.HmacSHA1(message, key).toString()};
 }
 
 ajax_call = function(method, path, func, data) {
@@ -195,21 +192,20 @@ ajax_call = function(method, path, func, data) {
 
     xhttp.open(method, url + path, true);
 
-    if (method != "GET") {
+    if (method == 'GET')
+        xhttp.send();
+    else {
         xhttp.setRequestHeader("Content-Type", "application/json");
 
         // when log in or sign up - sending without hash
         if (path != "/sign_in" && path != "/sign_up") {
             var mes_hash = hash_message(data);
             var data_with_hash = {'data': data, 'hash': mes_hash['hash']};
-            console.log(data_with_hash);
             xhttp.send(JSON.stringify(data_with_hash));
         }
         else
             xhttp.send(JSON.stringify(data));
     }
-    else
-        xhttp.send();
 }
 
 window.onload = function(){
@@ -381,7 +377,7 @@ login = function(email, password) {
 
         }
     }
-    console.log(data);
+
     ajax_call("POST", "/sign_in", func, data);
 }
 

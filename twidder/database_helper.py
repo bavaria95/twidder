@@ -88,21 +88,16 @@ def sign_in_user(d):
 def sign_out_user(m):
     if 'forced' in m['data']:
         d = m['data']
-        helper.log('forced')
-        helper.log(d)
     else:
         d = m['data']
         h = m['hash']
-        helper.log('not forced')
-        helper.log(d)
-        helper.log(h)
 
         if not helper.is_legid(d, h):
             return {"success": False, "message": "You're not autorized to see this."}
 
 
     token = d['token']
-    helper.log(token)
+
     try:
         if d['forced']:
             forced = True
@@ -291,15 +286,10 @@ def notify_user(token):
     stats_info.notify_by_token(token, data)
 
 def notify_all_users():
-    helper.log('starting notifying each one')
-
     tokens = stats_info.all_subscribers()
-    helper.log(tokens)
     for t in tokens:
         data = collect_information(t)
-        helper.log(data)
         stats_info.notify_by_token(t, data)
-    helper.log('notified already')
 
 def collect_information(token):
     registered = _get_number_of_registered_users()
