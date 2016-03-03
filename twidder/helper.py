@@ -171,3 +171,8 @@ class StatsInfo():
 def generate_random_token():
     token_length = 36
     return binascii.hexlify(os.urandom(token_length))
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'avi', 'mp4'])
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

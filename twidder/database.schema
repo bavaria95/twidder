@@ -1,0 +1,14 @@
+PRAGMA foreign_keys = off;
+BEGIN TRANSACTION;
+
+-- Table: Message
+CREATE TABLE Message (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "To_email" TEXT REFERENCES User (Email) NOT NULL, "From_email" TEXT REFERENCES User (Email) NOT NULL, Content TEXT, Media BOOLEAN NOT NULL);
+
+-- Table: User
+CREATE TABLE User (Email TEXT PRIMARY KEY UNIQUE NOT NULL, Password TEXT (8) NOT NULL, Firstname TEXT, Familyname TEXT, Gender TEXT NOT NULL, City TEXT, Country TEXT);
+
+-- Index: To_whom_message
+CREATE INDEX To_whom_message ON Message ("To_email");
+
+COMMIT TRANSACTION;
+PRAGMA foreign_keys = on;

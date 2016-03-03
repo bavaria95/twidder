@@ -1,6 +1,6 @@
 import os
 from werkzeug import secure_filename
-from flask import Flask, request
+from flask import Flask, request, send_from_directory, Response
 import json
 import database_helper
 from flask.ext.cors import CORS
@@ -9,8 +9,7 @@ from flask_sockets import Sockets
 
 import helper
 
-UPLOAD_FOLDER = 'videos'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'avi'])
+UPLOAD_FOLDER = 'twidder/media'
 
 app = Flask(__name__, static_url_path='')
 sockets = Sockets(app)
@@ -78,32 +77,32 @@ def get_user_messages_by_token():
     return json.dumps(database_helper.get_user_messages_by_token(params))
     
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     token = request.form['token']
 
     file = request.files['file']
-    if file and allowed_file(file.filename):
+    if file and helper.allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         database_helper.post_message_file(filename, token)
         return 'uploaded'
     return 'error'
 
-@app.route('/init', methods=['GET'])
-def init():
-    database_helper._create_database_structure()
-    return 'yay'
+@app.route('/videos/<path:path>')
+def send_file(path):
+    filename = 'media/' + path
+    src = os.path.join(os.path.abspath(os.path.dirname(__file__)), filename)
+    f = open(src).read()
+
+    return Response(f, mimetype="video/mp4")
 
 
 
-@app.errorhandler(404)
-def another(e):
-    return app.send_static_file('client.html')
+
+# @app.errorhandler(404)
+# def another(e):
+#     return app.send_static_file('client.html')
 
 
 @sockets.route('/sock')
