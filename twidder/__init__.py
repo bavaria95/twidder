@@ -99,10 +99,9 @@ def send_file(path):
 
 
 
-
-# @app.errorhandler(404)
-# def another(e):
-#     return app.send_static_file('client.html')
+@app.errorhandler(404)
+def another(e):
+    return app.send_static_file('client.html')
 
 
 @sockets.route('/sock')

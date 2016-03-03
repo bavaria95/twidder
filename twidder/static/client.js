@@ -486,8 +486,8 @@ refresh_wall = function(which, email) {
             for (var msg of messages)
                 append_message_li(which, msg);
             
-            if (messages.length > 8)
-                prolonging_content(which);
+            // if (messages.length > 8)
+            prolonging_content(which);
         }
     }
     
@@ -500,7 +500,21 @@ refresh_wall = function(which, email) {
 
 append_message_li = function(which_wall, msg) {
     var newLi = document.createElement("li");
-    var text = document.createTextNode('"' + msg.content + '" from ' + msg.writer);
+    if (msg.media) {
+        var text = document.createElement("video");
+        text.setAttribute("width", "360");
+        text.setAttribute("height", "240");
+        text.setAttribute("controls", "true");
+
+        var src = document.createElement("source");
+        src.setAttribute("src", "http://127.0.0.1:5000/videos/" + msg.content);
+        src.setAttribute("type", "video/mp4");
+
+        text.appendChild(src);
+
+    }
+    else
+        var text = document.createTextNode('"' + msg.content + '" from ' + msg.writer);
 
     newLi.appendChild(text);
     var ulnew = document.getElementById("wall-list-" + which_wall);
@@ -508,7 +522,7 @@ append_message_li = function(which_wall, msg) {
 }
 prolonging_content = function(where) {
     var att = document.createAttribute("style");
-    att.value = "height: " + (300 + parseInt(window.getComputedStyle(document.getElementById("wall-" + where)).height)).toString() + "px;";
+    att.value = "height: " + (400 + parseInt(window.getComputedStyle(document.getElementById("wall-" + where)).height)).toString() + "px;";
     document.getElementById("content").setAttributeNode(att);
 }
 reset_content_height = function() {
