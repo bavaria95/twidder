@@ -89,7 +89,7 @@ def upload_file():
         return 'uploaded'
     return 'error'
 
-@app.route('/videos/<path:path>')
+@app.route('/media/<path:path>')
 def send_file(path):
     filename = 'media/' + path
     src = os.path.join(os.path.abspath(os.path.dirname(__file__)), filename)

@@ -500,17 +500,24 @@ refresh_wall = function(which, email) {
 append_message_li = function(which_wall, msg) {
     var newLi = document.createElement("li");
     if (msg.media) {
-        var text = document.createElement("video");
-        text.setAttribute("width", "360");
-        text.setAttribute("height", "240");
-        text.setAttribute("controls", "true");
+        if (msg.content.slice(-3) == "mp4") {
+            var text = document.createElement("video");
+            text.setAttribute("width", "360");
+            text.setAttribute("height", "240");
+            text.setAttribute("controls", "true");
 
-        var src = document.createElement("source");
-        src.setAttribute("src", "http://127.0.0.1:5000/videos/" + msg.content);
-        src.setAttribute("type", "video/mp4");
+            var src = document.createElement("source");
+            src.setAttribute("src", "media/" + msg.content);
+            src.setAttribute("type", "video/mp4");
 
-        text.appendChild(src);
-
+            text.appendChild(src);
+        }
+        else {
+            var text = document.createElement("img");
+            text.setAttribute("src", "media/" + msg.content);
+            text.setAttribute("width", "360");
+            text.setAttribute("height", "240");
+        }
     }
     else
         var text = document.createTextNode('"' + msg.content + '" from ' + msg.writer);
