@@ -84,12 +84,20 @@ def allowed_file(filename):
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    token = request.form['token']
+
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        database_helper.post_message_file(filename, token)
         return 'uploaded'
     return 'error'
+
+@app.route('/init', methods=['GET'])
+def init():
+    database_helper._create_database_structure()
+    return 'yay'
 
 
 

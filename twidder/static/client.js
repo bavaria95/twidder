@@ -677,7 +677,7 @@ drag_and_drop = function(){
     function readfiles(files) {
         var formData = tests.formdata ? new FormData() : null;
         for (var i = 0; i < files.length; i++) {
-          if (tests.formdata) formData.append('file', files[i]);
+          if (tests.formdata) formData.append('file', files[0]);
           previewfile(files[i]);
         }
 
@@ -698,6 +698,9 @@ drag_and_drop = function(){
             }
           }
 
+          formData.append('token', get_token());
+
+          console.log(formData);
           xhr.send(formData);
         }
     }

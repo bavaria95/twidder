@@ -212,8 +212,8 @@ def post_message(m):
         return {"success": False, "message": "No such user."}
 
 
-    c.execute('INSERT INTO Message(To_email, From_email, Content) VALUES (?, ?, ?)',
-                                                    (to_email, from_email, message))
+    c.execute('INSERT INTO Message(To_email, From_email, Content, Media) VALUES (?, ?, ?, ?)',
+                                                    (to_email, from_email, message, False))
     db.commit()
 
 
@@ -315,3 +315,28 @@ def _get_number_of_all_posts():
     c.execute("SELECT COUNT(*) FROM Message")
 
     return c.fetchone()[0]
+
+
+def post_message_file(filename, token):
+    to_email = storage.get_user_email(token)
+
+    from_email = storage.get_user_email(token)
+    if not from_email:
+        return {"success": False, "message": "You are not signed in."}
+
+    try:
+        db = get_db()
+        c = db.cursor()
+    except:
+        return {"success": False, "message": "Database problems."}
+
+    c.execute("SELECT COUNT(*) FROM User WHERE Email=?", (to_email, ))
+    if c.fetchone()[0] != 1:
+        return {"success": False, "message": "No such user."}
+
+
+    c.execute('INSERT INTO Message(To_email, From_email, Content, Media) VALUES (?, ?, ?, ?)',
+                                                    (to_email, from_email, filename, True))
+    db.commit()
+
+    return {"success": True, "message": "Message posted"}
