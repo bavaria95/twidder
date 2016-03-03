@@ -189,12 +189,17 @@ label {
 }
 
 #status-send-home {
-    margin-top: 10px;
+    margin-top: 30px;
+    margin-right: -400px;
+    float: right;
+    width: 100px;
+    height: 40px;
 }
 
 #wall-refresh-home {
     float: right;
-    margin-right: 100px;
+    margin-right: -100px;
+    margin-top: 30px;
     width: 100px;
     height: 40px;
 }
@@ -203,7 +208,7 @@ label {
     width: 700px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
+    margin-top: 120px;
 }
 
 #status-field-browse {
@@ -311,4 +316,44 @@ label {
 
 #posts-chart {
     margin-top: 10px;
+}
+
+
+
+
+
+#holder {
+    float: right;
+    border: 10px solid #ccc;
+    width: 380px;
+    height: 30px;
+    margin: 10px auto;
+    margin-right: 100px;
+}
+#holder.hover {
+    border: 10px solid #0c0;
+}
+#holder img {
+    display: block;
+    margin: 10px auto;
+}
+#holder p {
+    margin: 10px;
+    font-size: 14px;
+}
+progress {
+    margin-right: 100px;
+    float: right;
+    width: 400px;
+}
+progress:after {
+    content: '%';
+}
+.fail {
+    background: #c00;
+    padding: 2px;
+    color: #fff;
+}
+.hidden {
+    display: none !important;
 }

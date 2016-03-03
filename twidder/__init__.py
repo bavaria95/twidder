@@ -1,3 +1,5 @@
+import os
+from werkzeug import secure_filename
 from flask import Flask, request
 import json
 import database_helper
@@ -7,8 +9,13 @@ from flask_sockets import Sockets
 
 import helper
 
+UPLOAD_FOLDER = 'videos'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'avi'])
+
 app = Flask(__name__, static_url_path='')
 sockets = Sockets(app)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 CORS(app)
 
@@ -70,6 +77,21 @@ def get_user_messages_by_token():
     params = request.json
     return json.dumps(database_helper.get_user_messages_by_token(params))
     
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return 'uploaded'
+    return 'error'
+
+
 
 @app.errorhandler(404)
 def another(e):
