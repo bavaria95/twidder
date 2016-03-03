@@ -486,7 +486,6 @@ refresh_wall = function(which, email) {
             for (var msg of messages)
                 append_message_li(which, msg);
             
-            // if (messages.length > 8)
             prolonging_content(which);
         }
     }
@@ -700,6 +699,7 @@ drag_and_drop = function(){
           var xhr = new XMLHttpRequest();
           xhr.open('POST', 'http://127.0.0.1:5000/upload');
           xhr.onload = function() {
+            refresh_wall("home");
             progress.value = progress.innerHTML = 100;
           };
 
