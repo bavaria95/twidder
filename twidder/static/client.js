@@ -637,9 +637,9 @@ drag_and_drop = function(){
           progress: document.getElementById('progress')
         },
         acceptedTypes = {
-          'image/png': true,
-          'image/jpeg': true,
-          'image/gif': true
+          // 'image/png': true,
+          // 'image/jpeg': true,
+          // 'image/gif': true
         },
         progress = document.getElementById('uploadprogress'),
         fileupload = document.getElementById('upload');
