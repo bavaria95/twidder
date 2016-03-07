@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 class TwidderTest(unittest.TestCase):
+    url = "http://127.0.0.1:5000"
 
     def setUp(self):
         self.driver = webdriver.Firefox()
@@ -14,7 +15,7 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         self.assertIn("Twidder", driver.title)
 
@@ -25,7 +26,7 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         login(driver, "nonexistedmail@gmail.com", "wrong pass")
                 
@@ -38,7 +39,7 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         login(driver, 'bavaria95@gmail.com', '12345678')
         
@@ -53,13 +54,13 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         login(driver, 'bavaria95@gmail.com', '12345678')
         
         driver.find_element_by_id('home-tab').click()
 
-        driver.find_element_by_id('status-field-home').send_keys('Uniq message!')
+        driver.find_element_by_id('status-field-home').send_keys('Unique message!')
         driver.find_element_by_id('status-send-home').click()
         driver.refresh()
 
@@ -72,7 +73,7 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         login(driver, 'bavaria95@gmail.com', '12345678')
         
@@ -101,7 +102,7 @@ class TwidderTest(unittest.TestCase):
         '''
 
         driver = self.driver
-        driver.get("http://127.0.0.1:5000")
+        driver.get(self.url)
 
         login(driver, 'bavaria95@gmail.com', '12345678')
         
