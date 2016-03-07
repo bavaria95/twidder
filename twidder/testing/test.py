@@ -8,11 +8,21 @@ class PythonOrgSearch(unittest.TestCase):
         self.driver = webdriver.Firefox()
 
     def test_title(self):
+        '''
+        Tests whether page loads and title of it contains "Twidder"
+        '''
+
         driver = self.driver
         driver.get("http://127.0.0.1:5000")
+
         self.assertIn("Twidder", driver.title)
 
     def test_login(self):
+        '''
+        Just tries to login with wrong credentials. Should be 
+        "Wrong username or password." in field for errors
+        '''
+
         driver = self.driver
         driver.get("http://127.0.0.1:5000")
 
@@ -21,6 +31,11 @@ class PythonOrgSearch(unittest.TestCase):
         self.assertIn('Wrong', driver.find_element_by_id('error-log').text)
     
     def test_user_info(self):
+        '''
+        Logs in with existing email/pass pair, click on Home tab and checks
+        whether user information contains it's email.
+        '''
+
         driver = self.driver
         driver.get("http://127.0.0.1:5000")
 
