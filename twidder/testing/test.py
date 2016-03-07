@@ -65,7 +65,36 @@ class PythonOrgSearch(unittest.TestCase):
 
         self.assertIn('Uniq message!', driver.find_element_by_tag_name('li').text)
 
+    def test_browse(self):
+        '''
+        Logs in, navigates to Browse tab, tries to search nonexisted user(expecting to see error)
+        then tries to find actual user and checks whether it's his page
+        '''
 
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000")
+
+        login(driver, 'bavaria95@gmail.com', '12345678')
+        
+        driver.find_element_by_id('browse-tab').click()
+
+        # try to find nonexistedmail@gmail.com(does not exist)
+        driver.find_element_by_id('search-field').send_keys('nonexistedmail@gmail.com')
+        driver.find_element_by_id('search-send').click()
+
+        self.assertIn('No such user', driver.find_element_by_id('search-error').text)
+        
+        # clear search field
+        driver.find_element_by_id('search-field').clear()
+
+        # find dima@qwe.com(exists)
+        driver.find_element_by_id('search-field').send_keys('dima@qwe.com')
+        driver.find_element_by_id('search-send').click()
+
+        # check his email in User info
+        self.assertIn('dima@qwe.com', driver.find_element_by_id('browse-email').text)
+
+        
     def tearDown(self):
         self.driver.close()
 
