@@ -1,9 +1,10 @@
+/* variables for Diffie-Hellman algorithm */
 // generator
 var g = 3;
 // divider
 var p = 17;
 
-
+/* declaration of client-side routes and actions for them */
 page('/', function() {
     if (get_token()) {
         page('/account');
@@ -116,11 +117,12 @@ page('/stats', function() {
     };
 });
 
-
+// in any other case
 page('*', function(){
     page('/');
 });
 
+// calculates SHA3 hash to use for password hashing on client-side
 hash = function(str) {
     return CryptoJS.SHA3(str).toString();
 }
@@ -166,6 +168,10 @@ draw_charts = function(d) {
     document.getElementById("posts-chart").innerHTML = '';
 }
 
+/* calculating Hash-based message authentication code.
+   message consists from values of all sending parameters(concatenated in 
+   order of alphanumerical order of keys), secret key and timestamp
+*/
 hash_message = function(data) {
     var key = get_secret();
 
@@ -226,6 +232,7 @@ window.onload = function(){
     page.start();
 }
 
+// defining all action-functions, which are not displayed by default
 define_onclick_functions = function() {
     var account_tab = document.getElementById("account-tab");
     account_tab.onclick = function() {
@@ -312,6 +319,9 @@ display_error_msg = function(id, msg) {
                 }, 3000);
 }
 
+/* checking correctness of entered data. passwords must match and be
+   longer than 8 symbols
+*/
 check_reg_correctness = function() {
 	var pass1 = document.getElementById("regpass1").value;
     var pass2 = document.getElementById("regpass2").value;
@@ -367,6 +377,9 @@ login = function(email, password) {
             page('/account');
 
 
+            /* socket init after successful login, to which is sended information about 
+            session termination when user is logged from another browser
+            */
             var login_socket;
             login_socket = new WebSocket("ws://" + document.domain + ":5000/sock");
             login_socket.onopen = function (event) {
@@ -526,21 +539,24 @@ append_message_li = function(which_wall, msg) {
     var ulnew = document.getElementById("wall-list-" + which_wall);
     ulnew.appendChild(newLi); 
 }
+// function which prolongs height of the content part(places border for it lower, if needed)
 prolonging_content = function(where) {
     var att = document.createAttribute("style");
     att.value = "height: " + (400 + parseInt(window.getComputedStyle(document.getElementById("wall-" + where)).height)).toString() + "px;";
     document.getElementById("content").setAttributeNode(att);
 }
+// resets height of content part to default value
 reset_content_height = function() {
     var att = document.createAttribute("style");
     att.value = "height: 550px";
     document.getElementById("content").setAttributeNode(att);
 }
 
+// obtains token from localstorage
 get_token = function() {
     return localStorage.getItem('token');
 }
-
+// obtains secret key from localstorage
 get_secret = function() {
     return localStorage.getItem('secret');
 }
@@ -567,6 +583,7 @@ get_user_info = function() {
 
 }
 
+// makes selected tab label more notable
 highlight_label = function(label) {
     document.getElementById('account-label').style.fontSize = "100%";
     document.getElementById('home-label').style.fontSize = "100%";
@@ -584,7 +601,6 @@ highlight_label = function(label) {
 
 
 fill_user_info_fields = function(tab, info) {
-
     document.getElementById(tab + '-email').innerHTML = info.email;
     document.getElementById(tab + '-firstname').innerHTML = info.firstname;
     document.getElementById(tab + '-familyname').innerHTML = info.familyname;
