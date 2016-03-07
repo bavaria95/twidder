@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class PythonOrgSearch(unittest.TestCase):
+class TwidderTest(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Firefox()
@@ -63,7 +63,7 @@ class PythonOrgSearch(unittest.TestCase):
         driver.find_element_by_id('status-send-home').click()
         driver.refresh()
 
-        self.assertIn('Uniq message!', driver.find_element_by_tag_name('li').text)
+        self.assertIn('Unique message!', driver.find_element_by_tag_name('li').text)
 
     def test_browse(self):
         '''
@@ -94,7 +94,40 @@ class PythonOrgSearch(unittest.TestCase):
         # check his email in User info
         self.assertIn('dima@qwe.com', driver.find_element_by_id('browse-email').text)
 
+    
+    def test_password_change(self):
+        '''
+        Logs in, then changes password, checks message and then changes it back
+        '''
+
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000")
+
+        login(driver, 'bavaria95@gmail.com', '12345678')
         
+        driver.find_element_by_id('account-tab').click()
+
+        # changes password from '12345678' to '87654321'
+        driver.find_element_by_name('current').send_keys('12345678')
+        driver.find_element_by_name('pass1').send_keys('87654321')
+        driver.find_element_by_name('pass2').send_keys('87654321')
+        driver.find_element_by_id('change-submit').click()
+
+        # clear
+        driver.find_element_by_name('current').clear()
+        driver.find_element_by_name('pass1').clear()
+        driver.find_element_by_name('pass2').clear()
+
+        # changes password from '87654321' back to '12345678'
+        driver.find_element_by_name('current').send_keys('87654321')
+        driver.find_element_by_name('pass1').send_keys('12345678')
+        driver.find_element_by_name('pass2').send_keys('12345678')
+        driver.find_element_by_id('change-submit').click()
+
+        # check whether it finished successfully
+        self.assertIn('Password changed', driver.find_element_by_id('change-error').text)
+
+
     def tearDown(self):
         self.driver.close()
 
