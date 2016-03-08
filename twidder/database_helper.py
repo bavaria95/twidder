@@ -217,15 +217,16 @@ def post_message(m):
     db.commit()
 
 
-    token_of_receiver = storage.get_token_by_email(to_email)
-    if token_of_receiver:
-        notify_user(token_of_receiver[0])
+    # token_of_receiver = storage.get_token_by_email(to_email)
+    # if token_of_receiver:
+    #     notify_user(token_of_receiver[0])
+    notify_all_users()
 
     return {"success": True, "message": "Message posted"}
 
 def get_user_messages_by_email(m, local=False):
     # local means this this query is from internal source and there is
-    # no need to check legitimacy of user
+    # no need to check legitimacy of the user
     if not local:
         d = m['data']
         h = m['hash']
@@ -274,16 +275,19 @@ def get_user_messages_by_token(m, local=False):
 
     return get_user_messages_by_email({'token': token, 'email': email}, True)
 
+# informs socket of particular user that it's statistics data should be updated
 def notify_user(token):
     data = collect_information(token)
     stats_info.notify_by_token(token, data)
 
+# informs all users that statistics has been changed
 def notify_all_users():
     tokens = stats_info.all_subscribers()
     for t in tokens:
         data = collect_information(t)
         stats_info.notify_by_token(t, data)
 
+# gets information about all needed fields for statistics
 def collect_information(token):
     registered = _get_number_of_registered_users()
     
@@ -338,5 +342,7 @@ def post_message_file(filename, token):
     c.execute('INSERT INTO Message(To_email, From_email, Content, Media) VALUES (?, ?, ?, ?)',
                                                     (to_email, from_email, filename, True))
     db.commit()
+
+    notify_all_users()
 
     return {"success": True, "message": "Message posted"}
