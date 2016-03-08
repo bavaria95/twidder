@@ -173,6 +173,6 @@ def generate_random_token():
     return binascii.hexlify(os.urandom(token_length))
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'avi', 'mp4'])
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'avi', 'mp4', 'mp3'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

@@ -525,6 +525,16 @@ append_message_li = function(which_wall, msg) {
 
             text.appendChild(src);
         }
+        else if (msg.content.slice(-3) == "mp3") {
+            var text = document.createElement("audio");
+            text.setAttribute("controls", "true");
+
+            var src = document.createElement("source");
+            src.setAttribute("src", "media/" + msg.content);
+            src.setAttribute("type", "audio/mpeg");
+
+            text.appendChild(src);
+        }
         else {
             var text = document.createElement("img");
             text.setAttribute("src", "media/" + msg.content);
